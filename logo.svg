@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="200" height="50" viewBox="0 0 200 50" xmlns="http://www.w3.org/2000/svg">
+    <style>
+        .logo-text {
+            font-family: Arial, sans-serif;
+            font-weight: bold;
+            font-size: 24px;
+        }
+        .logo-accent {
+            fill: #e31837;
+        }
+        .logo-group {
+            fill: #ffffff;
+        }
+    </style>
+    <text x="10" y="35" class="logo-text">
+        <tspan class="logo-accent">RS</tspan>
+        <tspan class="logo-group"> GROUP</tspan>
+    </text>
+</svg> 
