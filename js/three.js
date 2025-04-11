@@ -8,7 +8,7 @@ renderer.setSize(window.innerWidth, window.innerHeight);
 container.appendChild(renderer.domElement);
 
 // Create particle system
-const particleCount = 2040;
+const particleCount = 2346;
 const particles = new THREE.BufferGeometry();
 const positions = new Float32Array(particleCount * 3);
 const colors = new Float32Array(particleCount * 3);
@@ -17,29 +17,30 @@ const velocities = new Float32Array(particleCount * 3);
 const opacities = new Float32Array(particleCount);
 const fadeStates = new Float32Array(particleCount);
 const fadeSpeeds = new Float32Array(particleCount);
+const inertias = new Float32Array(particleCount);
 
 // Initialize particles with dramatically enhanced depth variation
 for (let i = 0; i < particleCount; i++) {
     // Random positions with dramatically increased Z-spread and stronger clustering
     const clusterChance = Math.random();
     let zCluster;
-    if (clusterChance < 0.3) {
-        zCluster = 6.0; // Very tight clusters
-    } else if (clusterChance < 0.5) {
-        zCluster = 4.0; // Tight clusters
-    } else if (clusterChance < 0.7) {
-        zCluster = 2.0; // Medium clusters
-    } else if (clusterChance < 0.85) {
-        zCluster = 1.0; // Loose clusters
+    if (clusterChance < 0.35) {
+        zCluster = 7.0; // Very tight clusters
+    } else if (clusterChance < 0.55) {
+        zCluster = 5.0; // Tight clusters
+    } else if (clusterChance < 0.75) {
+        zCluster = 3.0; // Medium clusters
+    } else if (clusterChance < 0.9) {
+        zCluster = 1.5; // Loose clusters
     } else {
-        zCluster = 0.4; // Very spread out
+        zCluster = 0.3; // Very spread out
     }
     
     // Add XY clustering with more levels
-    const xyCluster = clusterChance < 0.25 ? 0.2 : 
-                     (clusterChance < 0.45 ? 0.4 : 
-                     (clusterChance < 0.65 ? 0.6 : 
-                     (clusterChance < 0.85 ? 0.8 : 1.0))); // Five levels of XY clustering
+    const xyCluster = clusterChance < 0.3 ? 0.15 : 
+                     (clusterChance < 0.5 ? 0.3 : 
+                     (clusterChance < 0.7 ? 0.5 : 
+                     (clusterChance < 0.9 ? 0.7 : 1.0))); // Five levels of XY clustering
     
     positions[i * 3] = (Math.random() - 0.5) * 100 * xyCluster;
     positions[i * 3 + 1] = (Math.random() - 0.5) * 100 * xyCluster;
@@ -58,10 +59,13 @@ for (let i = 0; i < particleCount; i++) {
     
     // Random velocities with stronger Z-based variation and cluster-based movement
     const zFactor = 1 + (positions[i * 3 + 2] / 50);
-    const clusterSpeed = zCluster > 3.0 ? 0.7 : (zCluster > 1.5 ? 0.85 : 1.0); // More varied cluster speeds
-    velocities[i * 3] = (Math.random() - 0.5) * 0.15 * zFactor * clusterSpeed;
-    velocities[i + 1] = (Math.random() - 0.5) * 0.15 * zFactor * clusterSpeed;
-    velocities[i + 2] = (Math.random() - 0.5) * 0.15 * zFactor * clusterSpeed;
+    const clusterSpeed = zCluster > 4.0 ? 0.6 : (zCluster > 2.0 ? 0.8 : 1.0); // More varied cluster speeds
+    const speedVariation = Math.random() * 0.4 + 0.8; // 20% speed variation
+    inertias[i] = Math.random() * 0.4 + 0.8; // 20% inertia variation
+    
+    velocities[i * 3] = (Math.random() - 0.5) * 0.15 * zFactor * clusterSpeed * speedVariation;
+    velocities[i + 1] = (Math.random() - 0.5) * 0.15 * zFactor * clusterSpeed * speedVariation;
+    velocities[i + 2] = (Math.random() - 0.5) * 0.15 * zFactor * clusterSpeed * speedVariation;
     
     // Enhanced color with stronger depth-based variation
     const zPos = positions[i * 3 + 2];
@@ -197,10 +201,10 @@ function animate() {
             velocities[i + 1] += dy * force;
         }
         
-        // Update positions with enhanced parallax
-        positions[i] += velocities[i] * parallaxFactor;
-        positions[i + 1] += velocities[i + 1] * parallaxFactor;
-        positions[i + 2] += velocities[i + 2] * parallaxFactor;
+        // Update positions with enhanced parallax and inertia
+        positions[i] += velocities[i] * parallaxFactor * inertias[particleIndex];
+        positions[i + 1] += velocities[i + 1] * parallaxFactor * inertias[particleIndex];
+        positions[i + 2] += velocities[i + 2] * parallaxFactor * inertias[particleIndex];
         
         // Enhanced boundary checks with increased Z range
         if (Math.abs(positions[i]) > 45) { // Increased from 40
