@@ -20,7 +20,7 @@ canvas {
     right: 0;
     bottom: 0;
     z-index: 1;
-    pointer-events: auto;
+    pointer-events: none;
     touch-action: none;
     -webkit-touch-callout: none;
     -webkit-user-select: none;
@@ -33,7 +33,7 @@ canvas {
 
 #particles-js canvas {
     touch-action: none !important;
-    pointer-events: auto;
+    pointer-events: none;
     -webkit-touch-callout: none;
     -webkit-user-select: none;
     -khtml-user-select: none;
@@ -55,7 +55,8 @@ canvas {
 .hero-content {
     position: relative;
     z-index: 2;
-    pointer-events: none;
+    pointer-events: auto;
+    touch-action: auto;
 }
 
 /* Ensure content stays above particles */
