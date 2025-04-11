@@ -92,11 +92,11 @@ document.addEventListener('mousemove', (event) => {
     mouseSpeed = Math.sqrt(
         Math.pow(mouseX - prevMouseX, 2) + 
         Math.pow(mouseY - prevMouseY, 2)
-    ) * 30; // Increased from 25 to 30
+    ) * 30;
     
-    // Further increased rotation targets based on mouse position
-    targetRotationX = mouseY * 0.6; // Increased from 0.4 to 0.6
-    targetRotationY = mouseX * 0.6; // Increased from 0.4 to 0.6
+    // Increased rotation targets by 30%
+    targetRotationX = mouseY * 0.78; // Increased from 0.6 by 30%
+    targetRotationY = mouseX * 0.78; // Increased from 0.6 by 30%
 });
 
 camera.position.z = 25;
@@ -105,14 +105,14 @@ function animate() {
     requestAnimationFrame(animate);
     
     // Enhanced camera movement with stronger parallax
-    targetX = mouseX * 0.7; // Increased from 0.6
-    targetY = mouseY * 0.7; // Increased from 0.6
-    camera.position.x += (targetX - camera.position.x) * 0.04; // Slower damping for smoother movement
+    targetX = mouseX * 0.7;
+    targetY = mouseY * 0.7;
+    camera.position.x += (targetX - camera.position.x) * 0.04;
     camera.position.y += (-targetY - camera.position.y) * 0.04;
     
-    // Enhanced rotation based on mouse position with smoother damping
-    particleSystem.rotation.x += (targetRotationX - particleSystem.rotation.x) * 0.02; // Slower rotation
-    particleSystem.rotation.y += (targetRotationY - particleSystem.rotation.y) * 0.02;
+    // Adjusted rotation damping for smoother movement with increased sensitivity
+    particleSystem.rotation.x += (targetRotationX - particleSystem.rotation.x) * 0.018; // Reduced from 0.02
+    particleSystem.rotation.y += (targetRotationY - particleSystem.rotation.y) * 0.018; // Reduced from 0.02
     
     camera.lookAt(scene.position);
     
