@@ -25,9 +25,9 @@ for (let i = 0; i < particleCount; i++) {
     
     // Random velocities with stronger Z-based variation
     const zFactor = 1 + (positions[i * 3 + 2] / 50); // Adjusted for new Z range
-    velocities[i * 3] = (Math.random() - 0.5) * 0.2 * zFactor; // Reduced base velocity from 0.3
-    velocities[i + 1] = (Math.random() - 0.5) * 0.2 * zFactor;
-    velocities[i + 2] = (Math.random() - 0.5) * 0.2 * zFactor;
+    velocities[i * 3] = (Math.random() - 0.5) * 0.15 * zFactor; // Further reduced base velocity from 0.2
+    velocities[i + 1] = (Math.random() - 0.5) * 0.15 * zFactor;
+    velocities[i + 2] = (Math.random() - 0.5) * 0.15 * zFactor;
     
     // Enhanced color with stronger depth-based variation
     const zPos = positions[i * 3 + 2];
@@ -40,10 +40,11 @@ for (let i = 0; i < particleCount; i++) {
     colors[i * 3 + 1] = 0.005 + brightness * 0.01; // Further reduced green
     colors[i * 3 + 2] = 0.005 + brightness * 0.01; // Further reduced blue
     
-    // Dramatically enhanced size based on Z position
-    const zSizeFactor = 1 + (zPos / 10); // Further reduced denominator for much stronger size variation
+    // Dramatically enhanced size based on Z position with random variation
+    const zSizeFactor = 1 + (zPos / 8); // Further reduced denominator for much stronger size variation
+    const randomSizeVariation = Math.random() * 0.3 + 0.7; // Random size multiplier between 0.7 and 1.0
     const baseSize = Math.random() * 0.2 + 0.1; // Much larger base size
-    sizes[i] = baseSize * zSizeFactor; // Particles will get dramatically larger when closer
+    sizes[i] = baseSize * zSizeFactor * randomSizeVariation; // Particles will get dramatically larger when closer with random variation
 }
 
 particles.setAttribute('position', new THREE.BufferAttribute(positions, 3));
@@ -132,7 +133,7 @@ function animate() {
         
         // Much stronger parallax effect based on Z position
         const parallaxFactor = 1 + (z / 6); // Further reduced from 8 for much stronger effect
-        const force = (10 - dist) * 0.03 * mouseSpeed * parallaxFactor; // Reduced force from 0.04 for smoother movement
+        const force = (10 - dist) * 0.025 * mouseSpeed * parallaxFactor; // Further reduced force from 0.03 for even smoother movement
         
         if (dist < 10) { // Reduced interaction range
             velocities[i] += dx * force;
@@ -174,7 +175,7 @@ function animate() {
     }
     
     // Update line positions with reduced connection distance
-    const maxConnectionDistance = 15; // Reduced from previous value
+    const maxConnectionDistance = 8; // Further reduced from 12
     for (let i = 0; i < positions.length; i += 3) {
         linePositions[i] = positions[i];
         linePositions[i + 1] = positions[i + 1];
