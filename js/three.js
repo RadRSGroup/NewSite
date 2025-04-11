@@ -14,26 +14,42 @@ const positions = new Float32Array(particleCount * 3);
 const colors = new Float32Array(particleCount * 3);
 const sizes = new Float32Array(particleCount);
 const velocities = new Float32Array(particleCount * 3);
+const opacities = new Float32Array(particleCount); // New array for opacity
+const fadeStates = new Float32Array(particleCount); // New array for fade state
+const fadeSpeeds = new Float32Array(particleCount); // New array for fade speed
 
 // Initialize particles with dramatically enhanced depth variation
 for (let i = 0; i < particleCount; i++) {
     // Random positions with dramatically increased Z-spread and stronger clustering
     const clusterChance = Math.random();
     let zCluster;
-    if (clusterChance < 0.2) {
-        zCluster = 4.0; // Very tight clusters
-    } else if (clusterChance < 0.4) {
-        zCluster = 2.5; // Medium clusters
+    if (clusterChance < 0.25) {
+        zCluster = 5.0; // Very tight clusters
+    } else if (clusterChance < 0.45) {
+        zCluster = 3.0; // Medium clusters
+    } else if (clusterChance < 0.65) {
+        zCluster = 1.5; // Loose clusters
     } else {
-        zCluster = 0.6; // More spread out
+        zCluster = 0.5; // Very spread out
     }
     
     // Add XY clustering
-    const xyCluster = clusterChance < 0.3 ? 0.4 : 1.0; // Tight XY clusters for some particles
+    const xyCluster = clusterChance < 0.35 ? 0.3 : (clusterChance < 0.65 ? 0.6 : 1.0); // Three levels of XY clustering
     
-    positions[i * 3] = (Math.random() - 0.5) * 100 * xyCluster; // Apply XY clustering
+    positions[i * 3] = (Math.random() - 0.5) * 100 * xyCluster;
     positions[i * 3 + 1] = (Math.random() - 0.5) * 100 * xyCluster;
-    positions[i * 3 + 2] = (Math.random() - 0.5) * 150 * zCluster; // Further increased Z-spread with stronger clustering
+    positions[i * 3 + 2] = (Math.random() - 0.5) * 150 * zCluster;
+    
+    // Initialize fade states for 25 random particles
+    if (i < 25) {
+        fadeStates[i] = Math.random(); // Random initial fade state
+        fadeSpeeds[i] = Math.random() * 0.02 + 0.01; // Random fade speed
+        opacities[i] = fadeStates[i]; // Initial opacity
+    } else {
+        fadeStates[i] = 1;
+        fadeSpeeds[i] = 0;
+        opacities[i] = 1;
+    }
     
     // Random velocities with stronger Z-based variation and cluster-based movement
     const zFactor = 1 + (positions[i * 3 + 2] / 50); // Adjusted for new Z range
@@ -135,6 +151,29 @@ function animate() {
     const linePositions = lineGeometry.attributes.position.array;
     
     for (let i = 0; i < positions.length; i += 3) {
+        const particleIndex = i / 3;
+        
+        // Handle fading for the first 25 particles
+        if (particleIndex < 25) {
+            fadeStates[particleIndex] += fadeSpeeds[particleIndex];
+            
+            // Reset particle when fully faded
+            if (fadeStates[particleIndex] <= 0) {
+                fadeStates[particleIndex] = 0;
+                fadeSpeeds[particleIndex] = Math.abs(fadeSpeeds[particleIndex]); // Start fading in
+                // Randomize position and size when reappearing
+                positions[i] = (Math.random() - 0.5) * 100;
+                positions[i + 1] = (Math.random() - 0.5) * 100;
+                positions[i + 2] = (Math.random() - 0.5) * 150;
+                sizes[particleIndex] = Math.random() * 0.3 + 0.1; // New random size
+            } else if (fadeStates[particleIndex] >= 1) {
+                fadeStates[particleIndex] = 1;
+                fadeSpeeds[particleIndex] = -Math.abs(fadeSpeeds[particleIndex]); // Start fading out
+            }
+            
+            opacities[particleIndex] = fadeStates[particleIndex];
+        }
+        
         const x = positions[i];
         const y = positions[i + 1];
         const z = positions[i + 2];
@@ -188,24 +227,28 @@ function animate() {
     }
     
     // Update line positions with reduced connection distance
-    const maxConnectionDistance = 8; // Further reduced from 12
+    const maxConnectionDistance = 6; // Further reduced from 8
     for (let i = 0; i < positions.length; i += 3) {
-        linePositions[i] = positions[i];
-        linePositions[i + 1] = positions[i + 1];
-        linePositions[i + 2] = positions[i + 2];
-        
-        // Only connect particles that are closer together
-        for (let j = i + 3; j < positions.length; j += 3) {
-            const dx = positions[i] - positions[j];
-            const dy = positions[i + 1] - positions[j + 1];
-            const dz = positions[i + 2] - positions[j + 2];
-            const distance = Math.sqrt(dx * dx + dy * dy + dz * dz);
+        // Only draw connections for visible particles
+        if (opacities[i / 3] > 0.1) {
+            linePositions[i] = positions[i];
+            linePositions[i + 1] = positions[i + 1];
+            linePositions[i + 2] = positions[i + 2];
             
-            if (distance < maxConnectionDistance) {
-                // Create connection line
-                linePositions[j] = positions[j];
-                linePositions[j + 1] = positions[j + 1];
-                linePositions[j + 2] = positions[j + 2];
+            // Only connect particles that are closer together and visible
+            for (let j = i + 3; j < positions.length; j += 3) {
+                if (opacities[j / 3] > 0.1) {
+                    const dx = positions[i] - positions[j];
+                    const dy = positions[i + 1] - positions[j + 1];
+                    const dz = positions[i + 2] - positions[j + 2];
+                    const distance = Math.sqrt(dx * dx + dy * dy + dz * dz);
+                    
+                    if (distance < maxConnectionDistance) {
+                        linePositions[j] = positions[j];
+                        linePositions[j + 1] = positions[j + 1];
+                        linePositions[j + 2] = positions[j + 2];
+                    }
+                }
             }
         }
     }
