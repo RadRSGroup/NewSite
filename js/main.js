@@ -173,8 +173,8 @@ document.addEventListener('DOMContentLoaded', function() {
             // Calculate target rotations based on cursor position relative to center
             const centerX = window.innerWidth / 2;
             const centerY = window.innerHeight / 2;
-            targetRotationY = ((mouseX - centerX) / centerX) * 35; // max 35 degrees
-            targetRotationX = ((mouseY - centerY) / centerY) * -35; // max 35 degrees
+            targetRotationY = ((mouseX - centerX) / centerX) * 65; // max 65 degrees
+            targetRotationX = ((mouseY - centerY) / centerY) * -65; // max 65 degrees
         });
     }
 
@@ -187,7 +187,7 @@ document.addEventListener('DOMContentLoaded', function() {
             
             const canvas = document.querySelector('#particles-js canvas');
             if (canvas) {
-                canvas.style.transform = `perspective(3000px) rotateX(${currentRotationX}deg) rotateY(${currentRotationY}deg)`;
+                canvas.style.transform = `perspective(10000px) rotateX(${currentRotationX}deg) rotateY(${currentRotationY}deg) scale(1.2)`;
             }
         }
         requestAnimationFrame(animate);
