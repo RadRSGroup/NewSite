@@ -72,6 +72,14 @@ gsap.from('.contact-form', {
 
 // Initialize particles.js
 document.addEventListener('DOMContentLoaded', function() {
+    // Prevent touch events from affecting the canvas
+    const particlesContainer = document.getElementById('particles-js');
+    if (particlesContainer) {
+        particlesContainer.addEventListener('touchstart', (e) => e.preventDefault(), { passive: false });
+        particlesContainer.addEventListener('touchmove', (e) => e.preventDefault(), { passive: false });
+        particlesContainer.addEventListener('touchend', (e) => e.preventDefault(), { passive: false });
+    }
+
     particlesJS("particles-js", {
         "particles": {
             "number": {
@@ -127,12 +135,10 @@ document.addEventListener('DOMContentLoaded', function() {
             "detect_on": "canvas",
             "events": {
                 "onhover": {
-                    "enable": false,
-                    "mode": "grab"
+                    "enable": false
                 },
                 "onclick": {
-                    "enable": false,
-                    "mode": "push"
+                    "enable": false
                 },
                 "resize": true,
                 "touchstart": {
@@ -143,17 +149,6 @@ document.addEventListener('DOMContentLoaded', function() {
                 },
                 "touchend": {
                     "enable": false
-                }
-            },
-            "modes": {
-                "grab": {
-                    "distance": 140,
-                    "line_linked": {
-                        "opacity": 1
-                    }
-                },
-                "push": {
-                    "particles_nb": 4
                 }
             }
         },
