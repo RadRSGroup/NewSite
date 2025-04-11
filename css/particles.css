@@ -50,19 +50,22 @@ canvas {
     width: 100%;
     overflow: hidden;
     background-color: var(--dark-bg);
+    pointer-events: none;
+    touch-action: none;
 }
 
 .hero-content {
     position: relative;
     z-index: 2;
-    pointer-events: auto;
-    touch-action: auto;
+    pointer-events: none;
+    touch-action: none;
 }
 
 /* Ensure content stays above particles */
 .header {
     position: fixed;
     z-index: 10;
+    pointer-events: auto;
 }
 
 .main {
@@ -81,6 +84,7 @@ canvas {
     position: relative;
     z-index: 2;
     text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+    pointer-events: none;
 }
 
 .about-content h2,
