@@ -232,7 +232,7 @@ function animate() {
     }
     
     // Update line positions with reduced connection distance
-    const maxConnectionDistance = 5.1; // Reduced by 15% from 6
+    const maxConnectionDistance = 5.61; // Increased by 10% from 5.1
     for (let i = 0; i < positions.length; i += 3) {
         // Only draw connections for visible particles
         if (opacities[i / 3] > 0.1) {
