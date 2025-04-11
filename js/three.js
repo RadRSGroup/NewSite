@@ -17,32 +17,33 @@ const velocities = new Float32Array(particleCount * 3);
 
 // Initialize particles with enhanced depth variation
 for (let i = 0; i < particleCount; i++) {
-    // Random positions with increased Z-spread and stronger clustering
-    const zCluster = Math.random() < 0.4 ? 1.2 : 0.6; // Stronger clustering
-    positions[i * 3] = (Math.random() - 0.5) * 50; // Increased spread
-    positions[i * 3 + 1] = (Math.random() - 0.5) * 50;
-    positions[i * 3 + 2] = (Math.random() - 0.5) * 50 * zCluster; // Increased Z-spread
+    // Random positions with significantly increased Z-spread and stronger clustering
+    const zCluster = Math.random() < 0.4 ? 1.5 : 0.7; // Stronger clustering
+    positions[i * 3] = (Math.random() - 0.5) * 60; // Increased spread
+    positions[i * 3 + 1] = (Math.random() - 0.5) * 60;
+    positions[i * 3 + 2] = (Math.random() - 0.5) * 70 * zCluster; // Significantly increased Z-spread
     
     // Random velocities with stronger Z-based variation
-    const zFactor = 1 + (positions[i * 3 + 2] / 30); // More pronounced depth-based speed
-    velocities[i * 3] = (Math.random() - 0.5) * 0.15 * zFactor; // Increased base velocity
+    const zFactor = 1 + (positions[i * 3 + 2] / 35); // Adjusted for new Z range
+    velocities[i * 3] = (Math.random() - 0.5) * 0.15 * zFactor;
     velocities[i + 1] = (Math.random() - 0.5) * 0.15 * zFactor;
     velocities[i + 2] = (Math.random() - 0.5) * 0.15 * zFactor;
     
     // Enhanced color with stronger depth-based variation
     const zPos = positions[i * 3 + 2];
-    const depthBrightness = 1 - (Math.abs(zPos) / 50); // Adjusted for new Z range
-    const baseBrightness = Math.random() * 0.8 + 0.2; // Higher minimum brightness
+    const depthBrightness = 1 - (Math.abs(zPos) / 70); // Adjusted for new Z range
+    const baseBrightness = Math.random() * 0.8 + 0.2;
     const brightness = baseBrightness * depthBrightness;
     
     // More vibrant colors with depth
-    colors[i * 3] = 0.9 + brightness * 0.1; // More saturated red
-    colors[i * 3 + 1] = 0.05 + brightness * 0.05; // Reduced green
-    colors[i * 3 + 2] = 0.05 + brightness * 0.05; // Reduced blue
+    colors[i * 3] = 0.9 + brightness * 0.1;
+    colors[i * 3 + 1] = 0.05 + brightness * 0.05;
+    colors[i * 3 + 2] = 0.05 + brightness * 0.05;
     
-    // Enhanced size based on Z position
-    const zSizeFactor = 1 + (zPos / 30); // Stronger size variation
-    sizes[i] = (Math.random() * 0.06 + 0.03) * zSizeFactor; // Larger base size
+    // Dramatically enhanced size based on Z position
+    const zSizeFactor = 1 + (zPos / 20); // Reduced denominator for stronger size variation
+    const baseSize = Math.random() * 0.08 + 0.04; // Increased base size
+    sizes[i] = baseSize * zSizeFactor; // Particles will get much larger when closer
 }
 
 particles.setAttribute('position', new THREE.BufferAttribute(positions, 3));
@@ -143,17 +144,17 @@ function animate() {
         positions[i + 1] += velocities[i + 1] * parallaxFactor;
         positions[i + 2] += velocities[i + 2] * parallaxFactor;
         
-        // Enhanced boundary checks with Z consideration
-        if (Math.abs(positions[i]) > 25) { // Increased bounds
-            positions[i] = Math.sign(positions[i]) * 25;
-            velocities[i] *= -0.6; // Stronger bounce
+        // Enhanced boundary checks with increased Z range
+        if (Math.abs(positions[i]) > 30) { // Increased from 25
+            positions[i] = Math.sign(positions[i]) * 30;
+            velocities[i] *= -0.6;
         }
-        if (Math.abs(positions[i + 1]) > 25) {
-            positions[i + 1] = Math.sign(positions[i + 1]) * 25;
+        if (Math.abs(positions[i + 1]) > 30) {
+            positions[i + 1] = Math.sign(positions[i + 1]) * 30;
             velocities[i + 1] *= -0.6;
         }
-        if (Math.abs(positions[i + 2]) > 25) { // Increased from 20 to 25
-            positions[i + 2] = Math.sign(positions[i + 2]) * 25;
+        if (Math.abs(positions[i + 2]) > 35) { // Increased from 25 to 35
+            positions[i + 2] = Math.sign(positions[i + 2]) * 35;
             velocities[i + 2] *= -0.6;
         }
         
@@ -163,7 +164,7 @@ function animate() {
             velocities[i + 1] * velocities[i + 1] + 
             velocities[i + 2] * velocities[i + 2]
         );
-        const zBrightness = 1 - (Math.abs(z) / 50); // Adjusted for new Z range
+        const zBrightness = 1 - (Math.abs(z) / 70); // Adjusted for new Z range
         const rotationBrightness = 1 + Math.abs(particleSystem.rotation.y) * 0.8; // Increased rotation effect
         const brightness = Math.min(speed * 20, 1) * zBrightness * rotationBrightness; // Increased speed effect
         
