@@ -1,6 +1,6 @@
 // Three.js Background Animation
 const scene = new THREE.Scene();
-const camera = new THREE.PerspectiveCamera(65, window.innerWidth / window.innerHeight, 0.1, 1000);
+const camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 1000);
 const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
 const container = document.getElementById('canvas-container');
 
@@ -15,27 +15,34 @@ const colors = new Float32Array(particleCount * 3);
 const sizes = new Float32Array(particleCount);
 const velocities = new Float32Array(particleCount * 3);
 
-// Initialize particles with increased Z-spread
+// Initialize particles with enhanced depth variation
 for (let i = 0; i < particleCount; i++) {
-    // Random positions in a larger space with increased Z-spread
+    // Random positions with increased Z-spread and clustering
+    const zCluster = Math.random() < 0.3 ? 1 : 0.5; // Create depth clusters
     positions[i * 3] = (Math.random() - 0.5) * 40;
     positions[i * 3 + 1] = (Math.random() - 0.5) * 40;
-    positions[i * 3 + 2] = (Math.random() - 0.5) * 30; // Increased from 20 to 30
+    positions[i * 3 + 2] = (Math.random() - 0.5) * 40 * zCluster; // Increased Z-spread with clustering
     
-    // Random velocities
-    velocities[i * 3] = (Math.random() - 0.5) * 0.1;
-    velocities[i + 1] = (Math.random() - 0.5) * 0.1;
-    velocities[i + 2] = (Math.random() - 0.5) * 0.1;
+    // Random velocities with Z-based variation
+    const zFactor = 1 + (positions[i * 3 + 2] / 40); // Slower movement for back particles
+    velocities[i * 3] = (Math.random() - 0.5) * 0.1 * zFactor;
+    velocities[i + 1] = (Math.random() - 0.5) * 0.1 * zFactor;
+    velocities[i + 2] = (Math.random() - 0.5) * 0.1 * zFactor;
     
-    // Red star colors with varying brightness
-    const brightness = Math.random() * 0.7 + 0.3;
-    colors[i * 3] = 0.8 + brightness * 0.2;
-    colors[i * 3 + 1] = 0.1 + brightness * 0.1;
-    colors[i * 3 + 2] = 0.1 + brightness * 0.1;
-    
-    // Size based on Z position for depth effect
+    // Enhanced color with depth-based variation
     const zPos = positions[i * 3 + 2];
-    sizes[i] = Math.random() * 0.05 + 0.02 + (zPos / 100); // Size increases with Z position
+    const depthBrightness = 1 - (Math.abs(zPos) / 40); // Brighter when closer
+    const baseBrightness = Math.random() * 0.7 + 0.3;
+    const brightness = baseBrightness * depthBrightness;
+    
+    // More vibrant colors with depth
+    colors[i * 3] = 0.8 + brightness * 0.2; // Red
+    colors[i * 3 + 1] = 0.1 + brightness * 0.1; // Green
+    colors[i * 3 + 2] = 0.1 + brightness * 0.1; // Blue
+    
+    // Enhanced size based on Z position
+    const zSizeFactor = 1 + (zPos / 40); // Size increases with forward position
+    sizes[i] = (Math.random() * 0.05 + 0.02) * zSizeFactor;
 }
 
 particles.setAttribute('position', new THREE.BufferAttribute(positions, 3));
@@ -72,6 +79,8 @@ let mouseX = 0;
 let mouseY = 0;
 let targetX = 0;
 let targetY = 0;
+let targetRotationX = 0;
+let targetRotationY = 0;
 let mouseSpeed = 0;
 
 document.addEventListener('mousemove', (event) => {
@@ -83,6 +92,10 @@ document.addEventListener('mousemove', (event) => {
         Math.pow(mouseX - prevMouseX, 2) + 
         Math.pow(mouseY - prevMouseY, 2)
     ) * 20;
+    
+    // Update rotation targets based on mouse position
+    targetRotationX = mouseY * 0.2;
+    targetRotationY = mouseX * 0.2;
 });
 
 camera.position.z = 25;
@@ -90,11 +103,16 @@ camera.position.z = 25;
 function animate() {
     requestAnimationFrame(animate);
     
-    // Enhanced camera movement with parallax
-    targetX = mouseX * 0.3; // Increased from 0.2
-    targetY = mouseY * 0.3; // Increased from 0.2
+    // Enhanced camera movement with stronger parallax
+    targetX = mouseX * 0.4; // Increased from 0.3
+    targetY = mouseY * 0.4; // Increased from 0.3
     camera.position.x += (targetX - camera.position.x) * 0.05;
     camera.position.y += (-targetY - camera.position.y) * 0.05;
+    
+    // Smooth rotation based on mouse position
+    particleSystem.rotation.x += (targetRotationX - particleSystem.rotation.x) * 0.02;
+    particleSystem.rotation.y += (targetRotationY - particleSystem.rotation.y) * 0.02;
+    
     camera.lookAt(scene.position);
     
     const positions = particles.attributes.position.array;
@@ -102,26 +120,25 @@ function animate() {
     const linePositions = lineGeometry.attributes.position.array;
     
     for (let i = 0; i < positions.length; i += 3) {
-        const time = Date.now() * 0.001;
         const x = positions[i];
         const y = positions[i + 1];
         const z = positions[i + 2];
         
-        // Enhanced mouse interaction with parallax
+        // Enhanced mouse interaction with stronger parallax
         const dx = mouseX * 40 - x;
         const dy = -mouseY * 40 - y;
         const dist = Math.sqrt(dx * dx + dy * dy);
         
-        // Parallax effect based on Z position
-        const parallaxFactor = 1 + (z / 30); // Particles further back move less
-        const force = (10 - dist) * 0.01 * mouseSpeed * parallaxFactor;
+        // Stronger parallax effect based on Z position
+        const parallaxFactor = 1 + (z / 20); // Increased from 30 to 20 for stronger effect
+        const force = (10 - dist) * 0.015 * mouseSpeed * parallaxFactor; // Increased force
         
         if (dist < 10) {
             velocities[i] += dx * force;
             velocities[i + 1] += dy * force;
         }
         
-        // Update positions with velocity and parallax
+        // Update positions with enhanced parallax
         positions[i] += velocities[i] * parallaxFactor;
         positions[i + 1] += velocities[i + 1] * parallaxFactor;
         positions[i + 2] += velocities[i + 2] * parallaxFactor;
@@ -135,19 +152,21 @@ function animate() {
             positions[i + 1] = Math.sign(positions[i + 1]) * 20;
             velocities[i + 1] *= -0.5;
         }
-        if (Math.abs(positions[i + 2]) > 15) { // Increased from 10 to 15
-            positions[i + 2] = Math.sign(positions[i + 2]) * 15;
+        if (Math.abs(positions[i + 2]) > 20) { // Increased from 15 to 20
+            positions[i + 2] = Math.sign(positions[i + 2]) * 20;
             velocities[i + 2] *= -0.5;
         }
         
-        // Enhanced color based on Z position and velocity
+        // Enhanced color based on Z position, velocity, and rotation
         const speed = Math.sqrt(
             velocities[i] * velocities[i] + 
             velocities[i + 1] * velocities[i + 1] + 
             velocities[i + 2] * velocities[i + 2]
         );
-        const zBrightness = 1 - (Math.abs(z) / 30); // Brighter when closer
-        const brightness = Math.min(speed * 15, 1) * zBrightness;
+        const zBrightness = 1 - (Math.abs(z) / 40); // Adjusted for new Z range
+        const rotationBrightness = 1 + Math.abs(particleSystem.rotation.y) * 0.5;
+        const brightness = Math.min(speed * 15, 1) * zBrightness * rotationBrightness;
+        
         colors[i] = 0.8 + brightness * 0.2;
         colors[i + 1] = 0.1 + brightness * 0.1;
         colors[i + 2] = 0.1 + brightness * 0.1;
