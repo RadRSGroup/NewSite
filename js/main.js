@@ -72,42 +72,16 @@ gsap.from('.contact-form', {
 
 // Initialize particles.js
 document.addEventListener('DOMContentLoaded', function() {
-    // Prevent touch events from affecting the canvas
-    const particlesContainer = document.getElementById('particles-js');
-    const preventTouch = (e) => {
-        e.preventDefault();
-        e.stopPropagation();
-        return false;
-    };
-
-    if (particlesContainer) {
-        // Disable all touch events on the container
-        particlesContainer.style.touchAction = 'none';
-        particlesContainer.addEventListener('touchstart', preventTouch, { passive: false });
-        particlesContainer.addEventListener('touchmove', preventTouch, { passive: false });
-        particlesContainer.addEventListener('touchend', preventTouch, { passive: false });
-        particlesContainer.addEventListener('touchcancel', preventTouch, { passive: false });
-        
-        // Also prevent touch events on the canvas once it's created
-        setTimeout(() => {
-            const canvas = particlesContainer.querySelector('canvas');
-            if (canvas) {
-                canvas.style.touchAction = 'none';
-                canvas.addEventListener('touchstart', preventTouch, { passive: false });
-                canvas.addEventListener('touchmove', preventTouch, { passive: false });
-                canvas.addEventListener('touchend', preventTouch, { passive: false });
-                canvas.addEventListener('touchcancel', preventTouch, { passive: false });
-            }
-        }, 100);
-    }
-
-    particlesJS("particles-js", {
+    // Check if device is mobile
+    const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+    
+    const config = {
         "particles": {
             "number": {
                 "value": 180,
                 "density": {
                     "enable": true,
-                    "value_area": 800
+                    "value_area": isMobile ? 1000 : 800
                 }
             },
             "color": {
@@ -173,8 +147,54 @@ document.addEventListener('DOMContentLoaded', function() {
                 }
             }
         },
-        "retina_detect": true
-    });
+        "retina_detect": true,
+        "fps_limit": 30
+    };
+
+    // Initialize particles
+    particlesJS("particles-js", config);
+
+    // Handle window resize
+    function updateParticleDensity() {
+        if (window.pJSDom && window.pJSDom[0]) {
+            window.pJSDom[0].pJS.particles.number.density.value_area = isMobile ? 1000 : 800;
+            window.pJSDom[0].pJS.fn.particlesRefresh();
+        }
+    }
+
+    window.addEventListener('resize', updateParticleDensity);
+
+    // Only add mouse movement effect on non-touch devices
+    if (!isMobile) {
+        document.addEventListener('mousemove', (e) => {
+            mouseX = e.clientX;
+            mouseY = e.clientY;
+            
+            // Calculate target rotations based on cursor position relative to center
+            const centerX = window.innerWidth / 2;
+            const centerY = window.innerHeight / 2;
+            targetRotationY = ((mouseX - centerX) / centerX) * 35; // max 35 degrees
+            targetRotationX = ((mouseY - centerY) / centerY) * -35; // max 35 degrees
+        });
+    }
+
+    // Smooth animation loop for rotation
+    function animate() {
+        if (!isMobile) {
+            // Smoothly interpolate current rotation to target rotation
+            currentRotationX += (targetRotationX - currentRotationX) * 0.05;
+            currentRotationY += (targetRotationY - currentRotationY) * 0.05;
+            
+            const canvas = document.querySelector('#particles-js canvas');
+            if (canvas) {
+                canvas.style.transform = `perspective(3000px) rotateX(${currentRotationX}deg) rotateY(${currentRotationY}deg)`;
+            }
+        }
+        requestAnimationFrame(animate);
+    }
+
+    // Start the animation loop
+    animate();
 });
 
 // Enhanced cursor following effect with smooth repulsion
@@ -186,46 +206,4 @@ let targetRotationX = 0;
 let targetRotationY = 0;
 let currentRotationX = 0;
 let currentRotationY = 0;
-let isMoving = false;
-
-function updateParticleDensity() {
-    const particles = window.pJSDom[0].pJS.particles;
-    particles.number.density.value_area = window.innerWidth * window.innerHeight / 2;
-    window.pJSDom[0].pJS.fn.particlesRefresh();
-}
-
-window.addEventListener('resize', updateParticleDensity);
-
-// Only add mouse movement effect on non-touch devices
-if (!('ontouchstart' in window)) {
-    document.addEventListener('mousemove', (e) => {
-        mouseX = e.clientX;
-        mouseY = e.clientY;
-        
-        // Calculate target rotations based on cursor position relative to center
-        const centerX = window.innerWidth / 2;
-        const centerY = window.innerHeight / 2;
-        targetRotationY = ((mouseX - centerX) / centerX) * 35; // max 35 degrees
-        targetRotationX = ((mouseY - centerY) / centerY) * -35; // max 35 degrees
-    });
-}
-
-// Smooth animation loop for rotation
-function animate() {
-    // Smoothly interpolate current rotation to target rotation
-    currentRotationX += (targetRotationX - currentRotationX) * 0.05;
-    currentRotationY += (targetRotationY - currentRotationY) * 0.05;
-    
-    const canvas = document.querySelector('#particles-js canvas');
-    if (canvas) {
-        canvas.style.transform = `perspective(3000px) rotateX(${currentRotationX}deg) rotateY(${currentRotationY}deg)`;
-    }
-    
-    requestAnimationFrame(animate);
-}
-
-// Initialize particle density
-updateParticleDensity();
-
-// Start the animation loop
-animate(); 
+let isMoving = false; 
