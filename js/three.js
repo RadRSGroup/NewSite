@@ -8,43 +8,48 @@ renderer.setSize(window.innerWidth, window.innerHeight);
 container.appendChild(renderer.domElement);
 
 // Create particle system
-const particleCount = 2000;
+const particleCount = 2040;
 const particles = new THREE.BufferGeometry();
 const positions = new Float32Array(particleCount * 3);
 const colors = new Float32Array(particleCount * 3);
 const sizes = new Float32Array(particleCount);
 const velocities = new Float32Array(particleCount * 3);
-const opacities = new Float32Array(particleCount); // New array for opacity
-const fadeStates = new Float32Array(particleCount); // New array for fade state
-const fadeSpeeds = new Float32Array(particleCount); // New array for fade speed
+const opacities = new Float32Array(particleCount);
+const fadeStates = new Float32Array(particleCount);
+const fadeSpeeds = new Float32Array(particleCount);
 
 // Initialize particles with dramatically enhanced depth variation
 for (let i = 0; i < particleCount; i++) {
     // Random positions with dramatically increased Z-spread and stronger clustering
     const clusterChance = Math.random();
     let zCluster;
-    if (clusterChance < 0.25) {
-        zCluster = 5.0; // Very tight clusters
-    } else if (clusterChance < 0.45) {
-        zCluster = 3.0; // Medium clusters
-    } else if (clusterChance < 0.65) {
-        zCluster = 1.5; // Loose clusters
+    if (clusterChance < 0.3) {
+        zCluster = 6.0; // Very tight clusters
+    } else if (clusterChance < 0.5) {
+        zCluster = 4.0; // Tight clusters
+    } else if (clusterChance < 0.7) {
+        zCluster = 2.0; // Medium clusters
+    } else if (clusterChance < 0.85) {
+        zCluster = 1.0; // Loose clusters
     } else {
-        zCluster = 0.5; // Very spread out
+        zCluster = 0.4; // Very spread out
     }
     
-    // Add XY clustering
-    const xyCluster = clusterChance < 0.35 ? 0.3 : (clusterChance < 0.65 ? 0.6 : 1.0); // Three levels of XY clustering
+    // Add XY clustering with more levels
+    const xyCluster = clusterChance < 0.25 ? 0.2 : 
+                     (clusterChance < 0.45 ? 0.4 : 
+                     (clusterChance < 0.65 ? 0.6 : 
+                     (clusterChance < 0.85 ? 0.8 : 1.0))); // Five levels of XY clustering
     
     positions[i * 3] = (Math.random() - 0.5) * 100 * xyCluster;
     positions[i * 3 + 1] = (Math.random() - 0.5) * 100 * xyCluster;
     positions[i * 3 + 2] = (Math.random() - 0.5) * 150 * zCluster;
     
-    // Initialize fade states for 35 random particles (increased from 25)
+    // Initialize fade states for 35 random particles
     if (i < 35) {
-        fadeStates[i] = Math.random(); // Random initial fade state
-        fadeSpeeds[i] = Math.random() * 0.03 + 0.015; // Increased fade speed
-        opacities[i] = fadeStates[i]; // Initial opacity
+        fadeStates[i] = Math.random();
+        fadeSpeeds[i] = Math.random() * 0.03 + 0.015;
+        opacities[i] = fadeStates[i];
     } else {
         fadeStates[i] = 1;
         fadeSpeeds[i] = 0;
@@ -52,8 +57,8 @@ for (let i = 0; i < particleCount; i++) {
     }
     
     // Random velocities with stronger Z-based variation and cluster-based movement
-    const zFactor = 1 + (positions[i * 3 + 2] / 50); // Adjusted for new Z range
-    const clusterSpeed = zCluster > 2.0 ? 0.8 : 1.0; // Slower movement in tight clusters
+    const zFactor = 1 + (positions[i * 3 + 2] / 50);
+    const clusterSpeed = zCluster > 3.0 ? 0.7 : (zCluster > 1.5 ? 0.85 : 1.0); // More varied cluster speeds
     velocities[i * 3] = (Math.random() - 0.5) * 0.15 * zFactor * clusterSpeed;
     velocities[i + 1] = (Math.random() - 0.5) * 0.15 * zFactor * clusterSpeed;
     velocities[i + 2] = (Math.random() - 0.5) * 0.15 * zFactor * clusterSpeed;
