@@ -74,10 +74,31 @@ gsap.from('.contact-form', {
 document.addEventListener('DOMContentLoaded', function() {
     // Prevent touch events from affecting the canvas
     const particlesContainer = document.getElementById('particles-js');
+    const preventTouch = (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        return false;
+    };
+
     if (particlesContainer) {
-        particlesContainer.addEventListener('touchstart', (e) => e.preventDefault(), { passive: false });
-        particlesContainer.addEventListener('touchmove', (e) => e.preventDefault(), { passive: false });
-        particlesContainer.addEventListener('touchend', (e) => e.preventDefault(), { passive: false });
+        // Disable all touch events on the container
+        particlesContainer.style.touchAction = 'none';
+        particlesContainer.addEventListener('touchstart', preventTouch, { passive: false });
+        particlesContainer.addEventListener('touchmove', preventTouch, { passive: false });
+        particlesContainer.addEventListener('touchend', preventTouch, { passive: false });
+        particlesContainer.addEventListener('touchcancel', preventTouch, { passive: false });
+        
+        // Also prevent touch events on the canvas once it's created
+        setTimeout(() => {
+            const canvas = particlesContainer.querySelector('canvas');
+            if (canvas) {
+                canvas.style.touchAction = 'none';
+                canvas.addEventListener('touchstart', preventTouch, { passive: false });
+                canvas.addEventListener('touchmove', preventTouch, { passive: false });
+                canvas.addEventListener('touchend', preventTouch, { passive: false });
+                canvas.addEventListener('touchcancel', preventTouch, { passive: false });
+            }
+        }, 100);
     }
 
     particlesJS("particles-js", {
@@ -132,7 +153,7 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         },
         "interactivity": {
-            "detect_on": "canvas",
+            "detect_on": "window",
             "events": {
                 "onhover": {
                     "enable": false
