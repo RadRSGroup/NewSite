@@ -1,6 +1,6 @@
 // Three.js Background Animation
 const scene = new THREE.Scene();
-const camera = new THREE.PerspectiveCamera(50, window.innerWidth / window.innerHeight, 0.1, 1000);
+const camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 1000);
 const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
 const container = document.getElementById('canvas-container');
 
@@ -18,31 +18,31 @@ const velocities = new Float32Array(particleCount * 3);
 // Initialize particles with dramatically enhanced depth variation
 for (let i = 0; i < particleCount; i++) {
     // Random positions with dramatically increased Z-spread and stronger clustering
-    const zCluster = Math.random() < 0.4 ? 2.0 : 0.8; // Much stronger clustering
-    positions[i * 3] = (Math.random() - 0.5) * 80; // Increased spread
-    positions[i * 3 + 1] = (Math.random() - 0.5) * 80;
-    positions[i * 3 + 2] = (Math.random() - 0.5) * 100 * zCluster; // Dramatically increased Z-spread
+    const zCluster = Math.random() < 0.4 ? 2.5 : 0.9; // Even stronger clustering
+    positions[i * 3] = (Math.random() - 0.5) * 90; // Increased spread
+    positions[i * 3 + 1] = (Math.random() - 0.5) * 90;
+    positions[i * 3 + 2] = (Math.random() - 0.5) * 120 * zCluster; // Further increased Z-spread
     
     // Random velocities with stronger Z-based variation
-    const zFactor = 1 + (positions[i * 3 + 2] / 40); // Adjusted for new Z range
-    velocities[i * 3] = (Math.random() - 0.5) * 0.2 * zFactor; // Increased base velocity
-    velocities[i + 1] = (Math.random() - 0.5) * 0.2 * zFactor;
-    velocities[i + 2] = (Math.random() - 0.5) * 0.2 * zFactor;
+    const zFactor = 1 + (positions[i * 3 + 2] / 45); // Adjusted for new Z range
+    velocities[i * 3] = (Math.random() - 0.5) * 0.25 * zFactor; // Increased base velocity
+    velocities[i + 1] = (Math.random() - 0.5) * 0.25 * zFactor;
+    velocities[i + 2] = (Math.random() - 0.5) * 0.25 * zFactor;
     
     // Enhanced color with stronger depth-based variation
     const zPos = positions[i * 3 + 2];
-    const depthBrightness = 1 - (Math.abs(zPos) / 100); // Adjusted for new Z range
-    const baseBrightness = Math.random() * 0.9 + 0.1; // Higher minimum brightness
+    const depthBrightness = 1 - (Math.abs(zPos) / 120); // Adjusted for new Z range
+    const baseBrightness = Math.random() * 0.95 + 0.05; // Higher minimum brightness
     const brightness = baseBrightness * depthBrightness;
     
     // More vibrant colors with depth
-    colors[i * 3] = 0.95 + brightness * 0.05; // More saturated red
-    colors[i * 3 + 1] = 0.02 + brightness * 0.03; // Reduced green
-    colors[i * 3 + 2] = 0.02 + brightness * 0.03; // Reduced blue
+    colors[i * 3] = 0.98 + brightness * 0.02; // More saturated red
+    colors[i * 3 + 1] = 0.01 + brightness * 0.02; // Further reduced green
+    colors[i * 3 + 2] = 0.01 + brightness * 0.02; // Further reduced blue
     
     // Dramatically enhanced size based on Z position
-    const zSizeFactor = 1 + (zPos / 15); // Further reduced denominator for much stronger size variation
-    const baseSize = Math.random() * 0.12 + 0.06; // Much larger base size
+    const zSizeFactor = 1 + (zPos / 12); // Further reduced denominator for much stronger size variation
+    const baseSize = Math.random() * 0.15 + 0.08; // Much larger base size
     sizes[i] = baseSize * zSizeFactor; // Particles will get dramatically larger when closer
 }
 
@@ -105,14 +105,14 @@ function animate() {
     requestAnimationFrame(animate);
     
     // Enhanced camera movement with stronger parallax
-    targetX = mouseX * 0.7;
-    targetY = mouseY * 0.7;
-    camera.position.x += (targetX - camera.position.x) * 0.04;
-    camera.position.y += (-targetY - camera.position.y) * 0.04;
+    targetX = mouseX * 0.8; // Increased from 0.7
+    targetY = mouseY * 0.8; // Increased from 0.7
+    camera.position.x += (targetX - camera.position.x) * 0.035; // Slower damping
+    camera.position.y += (-targetY - camera.position.y) * 0.035;
     
     // Adjusted rotation damping for smoother movement with increased sensitivity
-    particleSystem.rotation.x += (targetRotationX - particleSystem.rotation.x) * 0.018; // Reduced from 0.02
-    particleSystem.rotation.y += (targetRotationY - particleSystem.rotation.y) * 0.018; // Reduced from 0.02
+    particleSystem.rotation.x += (targetRotationX - particleSystem.rotation.x) * 0.016; // Further reduced
+    particleSystem.rotation.y += (targetRotationY - particleSystem.rotation.y) * 0.016;
     
     camera.lookAt(scene.position);
     
@@ -126,15 +126,15 @@ function animate() {
         const z = positions[i + 2];
         
         // Enhanced mouse interaction with stronger parallax
-        const dx = mouseX * 60 - x; // Increased range
-        const dy = -mouseY * 60 - y;
+        const dx = mouseX * 70 - x; // Increased range
+        const dy = -mouseY * 70 - y;
         const dist = Math.sqrt(dx * dx + dy * dy);
         
         // Much stronger parallax effect based on Z position
-        const parallaxFactor = 1 + (z / 10); // Further reduced from 15 to 10 for much stronger effect
-        const force = (15 - dist) * 0.025 * mouseSpeed * parallaxFactor; // Increased force and range
+        const parallaxFactor = 1 + (z / 8); // Further reduced from 10 for much stronger effect
+        const force = (12 - dist) * 0.03 * mouseSpeed * parallaxFactor; // Increased force, reduced range
         
-        if (dist < 15) { // Increased interaction range
+        if (dist < 12) { // Reduced interaction range
             velocities[i] += dx * force;
             velocities[i + 1] += dy * force;
         }
@@ -145,17 +145,17 @@ function animate() {
         positions[i + 2] += velocities[i + 2] * parallaxFactor;
         
         // Enhanced boundary checks with increased Z range
-        if (Math.abs(positions[i]) > 40) { // Increased from 30
-            positions[i] = Math.sign(positions[i]) * 40;
-            velocities[i] *= -0.7; // Stronger bounce
+        if (Math.abs(positions[i]) > 45) { // Increased from 40
+            positions[i] = Math.sign(positions[i]) * 45;
+            velocities[i] *= -0.75; // Stronger bounce
         }
-        if (Math.abs(positions[i + 1]) > 40) {
-            positions[i + 1] = Math.sign(positions[i + 1]) * 40;
-            velocities[i + 1] *= -0.7;
+        if (Math.abs(positions[i + 1]) > 45) {
+            positions[i + 1] = Math.sign(positions[i + 1]) * 45;
+            velocities[i + 1] *= -0.75;
         }
-        if (Math.abs(positions[i + 2]) > 50) { // Increased from 35 to 50
-            positions[i + 2] = Math.sign(positions[i + 2]) * 50;
-            velocities[i + 2] *= -0.7;
+        if (Math.abs(positions[i + 2]) > 60) { // Increased from 50
+            positions[i + 2] = Math.sign(positions[i + 2]) * 60;
+            velocities[i + 2] *= -0.75;
         }
         
         // Enhanced color based on Z position, velocity, and rotation
@@ -164,20 +164,36 @@ function animate() {
             velocities[i + 1] * velocities[i + 1] + 
             velocities[i + 2] * velocities[i + 2]
         );
-        const zBrightness = 1 - (Math.abs(z) / 100); // Adjusted for new Z range
-        const rotationBrightness = 1 + Math.abs(particleSystem.rotation.y) * 1.0; // Increased rotation effect
-        const brightness = Math.min(speed * 25, 1) * zBrightness * rotationBrightness; // Increased speed effect
+        const zBrightness = 1 - (Math.abs(z) / 120); // Adjusted for new Z range
+        const rotationBrightness = 1 + Math.abs(particleSystem.rotation.y) * 1.2; // Increased rotation effect
+        const brightness = Math.min(speed * 30, 1) * zBrightness * rotationBrightness; // Increased speed effect
         
-        colors[i] = 0.95 + brightness * 0.05;
-        colors[i + 1] = 0.02 + brightness * 0.03;
-        colors[i + 2] = 0.02 + brightness * 0.03;
+        colors[i] = 0.98 + brightness * 0.02;
+        colors[i + 1] = 0.01 + brightness * 0.02;
+        colors[i + 2] = 0.01 + brightness * 0.02;
     }
     
-    // Update line positions
+    // Update line positions with reduced connection distance
+    const maxConnectionDistance = 15; // Reduced from previous value
     for (let i = 0; i < positions.length; i += 3) {
         linePositions[i] = positions[i];
         linePositions[i + 1] = positions[i + 1];
         linePositions[i + 2] = positions[i + 2];
+        
+        // Only connect particles that are closer together
+        for (let j = i + 3; j < positions.length; j += 3) {
+            const dx = positions[i] - positions[j];
+            const dy = positions[i + 1] - positions[j + 1];
+            const dz = positions[i + 2] - positions[j + 2];
+            const distance = Math.sqrt(dx * dx + dy * dy + dz * dz);
+            
+            if (distance < maxConnectionDistance) {
+                // Create connection line
+                linePositions[j] = positions[j];
+                linePositions[j + 1] = positions[j + 1];
+                linePositions[j + 2] = positions[j + 2];
+            }
+        }
     }
     
     particles.attributes.position.needsUpdate = true;
