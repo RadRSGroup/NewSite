@@ -18,6 +18,7 @@ const opacities = new Float32Array(particleCount);
 const fadeStates = new Float32Array(particleCount);
 const fadeSpeeds = new Float32Array(particleCount);
 const inertias = new Float32Array(particleCount);
+const masses = new Float32Array(particleCount); // New array for particle masses
 
 // Initialize particles with dramatically enhanced depth variation
 for (let i = 0; i < particleCount; i++) {
@@ -83,6 +84,9 @@ for (let i = 0; i < particleCount; i++) {
     const randomSizeVariation = Math.random() * 0.3 + 0.7; // Random size multiplier between 0.7 and 1.0
     const baseSize = Math.random() * 0.2 + 0.1; // Much larger base size
     sizes[i] = baseSize * zSizeFactor * randomSizeVariation; // Particles will get dramatically larger when closer with random variation
+    
+    // Initialize particle mass based on size
+    masses[i] = Math.random() * 0.5 + 0.5; // Mass between 0.5 and 1.0
 }
 
 particles.setAttribute('position', new THREE.BufferAttribute(positions, 3));
@@ -187,38 +191,47 @@ function animate() {
         const y = positions[i + 1];
         const z = positions[i + 2];
         
+        // Apply gravity
+        const gravity = 0.0005 * masses[particleIndex]; // Gravity scaled by mass
+        velocities[i + 1] -= gravity; // Apply gravity in Y direction
+        
         // Enhanced mouse interaction with stronger parallax
-        const dx = mouseX * 80 - x; // Increased range
+        const dx = mouseX * 80 - x;
         const dy = -mouseY * 80 - y;
         const dist = Math.sqrt(dx * dx + dy * dy);
         
         // Much stronger parallax effect based on Z position
-        const parallaxFactor = 1 + (z / 6); // Further reduced from 8 for much stronger effect
-        const force = (10 - dist) * 0.025 * mouseSpeed * parallaxFactor; // Further reduced force from 0.03 for even smoother movement
+        const parallaxFactor = 1 + (z / 6);
+        const force = (10 - dist) * 0.025 * mouseSpeed * parallaxFactor;
         
-        if (dist < 10) { // Reduced interaction range
+        if (dist < 10) {
             velocities[i] += dx * force;
             velocities[i + 1] += dy * force;
         }
         
-        // Update positions with enhanced parallax and inertia
+        // Update positions with enhanced parallax, inertia, and gravity
         positions[i] += velocities[i] * parallaxFactor * inertias[particleIndex];
         positions[i + 1] += velocities[i + 1] * parallaxFactor * inertias[particleIndex];
         positions[i + 2] += velocities[i + 2] * parallaxFactor * inertias[particleIndex];
         
-        // Enhanced boundary checks with increased Z range
-        if (Math.abs(positions[i]) > 45) { // Increased from 40
+        // Enhanced boundary checks with gravity bounce
+        if (Math.abs(positions[i]) > 45) {
             positions[i] = Math.sign(positions[i]) * 45;
-            velocities[i] *= -0.75; // Stronger bounce
+            velocities[i] *= -0.75;
         }
-        if (Math.abs(positions[i + 1]) > 45) {
-            positions[i + 1] = Math.sign(positions[i + 1]) * 45;
-            velocities[i + 1] *= -0.75;
+        if (positions[i + 1] < -45) { // Only check bottom boundary for gravity
+            positions[i + 1] = -45;
+            velocities[i + 1] *= -0.6; // Reduced bounce for more natural gravity effect
         }
-        if (Math.abs(positions[i + 2]) > 60) { // Increased from 50
+        if (Math.abs(positions[i + 2]) > 60) {
             positions[i + 2] = Math.sign(positions[i + 2]) * 60;
             velocities[i + 2] *= -0.75;
         }
+        
+        // Add air resistance/damping
+        velocities[i] *= 0.995;
+        velocities[i + 1] *= 0.995;
+        velocities[i + 2] *= 0.995;
         
         // Enhanced color based on Z position, velocity, and rotation
         const speed = Math.sqrt(
