@@ -134,7 +134,16 @@ document.addEventListener('DOMContentLoaded', function() {
                     "enable": false,
                     "mode": "push"
                 },
-                "resize": true
+                "resize": true,
+                "touchstart": {
+                    "enable": false
+                },
+                "touchmove": {
+                    "enable": false
+                },
+                "touchend": {
+                    "enable": false
+                }
             },
             "modes": {
                 "grab": {
@@ -171,16 +180,19 @@ function updateParticleDensity() {
 
 window.addEventListener('resize', updateParticleDensity);
 
-document.addEventListener('mousemove', (e) => {
-    mouseX = e.clientX;
-    mouseY = e.clientY;
-    
-    // Calculate target rotations based on cursor position relative to center
-    const centerX = window.innerWidth / 2;
-    const centerY = window.innerHeight / 2;
-    targetRotationY = ((mouseX - centerX) / centerX) * 35; // max 35 degrees
-    targetRotationX = ((mouseY - centerY) / centerY) * -35; // max 35 degrees
-});
+// Only add mouse movement effect on non-touch devices
+if (!('ontouchstart' in window)) {
+    document.addEventListener('mousemove', (e) => {
+        mouseX = e.clientX;
+        mouseY = e.clientY;
+        
+        // Calculate target rotations based on cursor position relative to center
+        const centerX = window.innerWidth / 2;
+        const centerY = window.innerHeight / 2;
+        targetRotationY = ((mouseX - centerX) / centerX) * 35; // max 35 degrees
+        targetRotationX = ((mouseY - centerY) / centerY) * -35; // max 35 degrees
+    });
+}
 
 // Smooth animation loop for rotation
 function animate() {
