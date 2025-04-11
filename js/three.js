@@ -18,31 +18,31 @@ const velocities = new Float32Array(particleCount * 3);
 // Initialize particles with dramatically enhanced depth variation
 for (let i = 0; i < particleCount; i++) {
     // Random positions with dramatically increased Z-spread and stronger clustering
-    const zCluster = Math.random() < 0.4 ? 2.5 : 0.9; // Even stronger clustering
-    positions[i * 3] = (Math.random() - 0.5) * 90; // Increased spread
-    positions[i * 3 + 1] = (Math.random() - 0.5) * 90;
-    positions[i * 3 + 2] = (Math.random() - 0.5) * 120 * zCluster; // Further increased Z-spread
+    const zCluster = Math.random() < 0.3 ? 3.0 : 0.8; // Even stronger clustering with more variation
+    positions[i * 3] = (Math.random() - 0.5) * 100; // Further increased spread
+    positions[i * 3 + 1] = (Math.random() - 0.5) * 100;
+    positions[i * 3 + 2] = (Math.random() - 0.5) * 150 * zCluster; // Further increased Z-spread
     
     // Random velocities with stronger Z-based variation
-    const zFactor = 1 + (positions[i * 3 + 2] / 45); // Adjusted for new Z range
-    velocities[i * 3] = (Math.random() - 0.5) * 0.25 * zFactor; // Increased base velocity
-    velocities[i + 1] = (Math.random() - 0.5) * 0.25 * zFactor;
-    velocities[i + 2] = (Math.random() - 0.5) * 0.25 * zFactor;
+    const zFactor = 1 + (positions[i * 3 + 2] / 50); // Adjusted for new Z range
+    velocities[i * 3] = (Math.random() - 0.5) * 0.3 * zFactor; // Increased base velocity
+    velocities[i + 1] = (Math.random() - 0.5) * 0.3 * zFactor;
+    velocities[i + 2] = (Math.random() - 0.5) * 0.3 * zFactor;
     
     // Enhanced color with stronger depth-based variation
     const zPos = positions[i * 3 + 2];
-    const depthBrightness = 1 - (Math.abs(zPos) / 120); // Adjusted for new Z range
-    const baseBrightness = Math.random() * 0.95 + 0.05; // Higher minimum brightness
+    const depthBrightness = 1 - (Math.abs(zPos) / 150); // Adjusted for new Z range
+    const baseBrightness = Math.random() * 0.9 + 0.1; // Higher minimum brightness
     const brightness = baseBrightness * depthBrightness;
     
     // More vibrant colors with depth
-    colors[i * 3] = 0.98 + brightness * 0.02; // More saturated red
-    colors[i * 3 + 1] = 0.01 + brightness * 0.02; // Further reduced green
-    colors[i * 3 + 2] = 0.01 + brightness * 0.02; // Further reduced blue
+    colors[i * 3] = 0.99 + brightness * 0.01; // More saturated red
+    colors[i * 3 + 1] = 0.005 + brightness * 0.01; // Further reduced green
+    colors[i * 3 + 2] = 0.005 + brightness * 0.01; // Further reduced blue
     
     // Dramatically enhanced size based on Z position
-    const zSizeFactor = 1 + (zPos / 12); // Further reduced denominator for much stronger size variation
-    const baseSize = Math.random() * 0.15 + 0.08; // Much larger base size
+    const zSizeFactor = 1 + (zPos / 10); // Further reduced denominator for much stronger size variation
+    const baseSize = Math.random() * 0.2 + 0.1; // Much larger base size
     sizes[i] = baseSize * zSizeFactor; // Particles will get dramatically larger when closer
 }
 
