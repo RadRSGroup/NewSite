@@ -25,9 +25,9 @@ for (let i = 0; i < particleCount; i++) {
     
     // Random velocities with stronger Z-based variation
     const zFactor = 1 + (positions[i * 3 + 2] / 50); // Adjusted for new Z range
-    velocities[i * 3] = (Math.random() - 0.5) * 0.3 * zFactor; // Increased base velocity
-    velocities[i + 1] = (Math.random() - 0.5) * 0.3 * zFactor;
-    velocities[i + 2] = (Math.random() - 0.5) * 0.3 * zFactor;
+    velocities[i * 3] = (Math.random() - 0.5) * 0.2 * zFactor; // Reduced base velocity from 0.3
+    velocities[i + 1] = (Math.random() - 0.5) * 0.2 * zFactor;
+    velocities[i + 2] = (Math.random() - 0.5) * 0.2 * zFactor;
     
     // Enhanced color with stronger depth-based variation
     const zPos = positions[i * 3 + 2];
@@ -126,15 +126,15 @@ function animate() {
         const z = positions[i + 2];
         
         // Enhanced mouse interaction with stronger parallax
-        const dx = mouseX * 70 - x; // Increased range
-        const dy = -mouseY * 70 - y;
+        const dx = mouseX * 80 - x; // Increased range
+        const dy = -mouseY * 80 - y;
         const dist = Math.sqrt(dx * dx + dy * dy);
         
         // Much stronger parallax effect based on Z position
-        const parallaxFactor = 1 + (z / 8); // Further reduced from 10 for much stronger effect
-        const force = (12 - dist) * 0.03 * mouseSpeed * parallaxFactor; // Increased force, reduced range
+        const parallaxFactor = 1 + (z / 6); // Further reduced from 8 for much stronger effect
+        const force = (10 - dist) * 0.03 * mouseSpeed * parallaxFactor; // Reduced force from 0.04 for smoother movement
         
-        if (dist < 12) { // Reduced interaction range
+        if (dist < 10) { // Reduced interaction range
             velocities[i] += dx * force;
             velocities[i + 1] += dy * force;
         }
