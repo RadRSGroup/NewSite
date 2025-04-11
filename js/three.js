@@ -40,10 +40,10 @@ for (let i = 0; i < particleCount; i++) {
     positions[i * 3 + 1] = (Math.random() - 0.5) * 100 * xyCluster;
     positions[i * 3 + 2] = (Math.random() - 0.5) * 150 * zCluster;
     
-    // Initialize fade states for 25 random particles
-    if (i < 25) {
+    // Initialize fade states for 35 random particles (increased from 25)
+    if (i < 35) {
         fadeStates[i] = Math.random(); // Random initial fade state
-        fadeSpeeds[i] = Math.random() * 0.02 + 0.01; // Random fade speed
+        fadeSpeeds[i] = Math.random() * 0.03 + 0.015; // Increased fade speed
         opacities[i] = fadeStates[i]; // Initial opacity
     } else {
         fadeStates[i] = 1;
@@ -153,8 +153,8 @@ function animate() {
     for (let i = 0; i < positions.length; i += 3) {
         const particleIndex = i / 3;
         
-        // Handle fading for the first 25 particles
-        if (particleIndex < 25) {
+        // Handle fading for the first 35 particles (increased from 25)
+        if (particleIndex < 35) {
             fadeStates[particleIndex] += fadeSpeeds[particleIndex];
             
             // Reset particle when fully faded
@@ -227,7 +227,7 @@ function animate() {
     }
     
     // Update line positions with reduced connection distance
-    const maxConnectionDistance = 6; // Further reduced from 8
+    const maxConnectionDistance = 5.1; // Reduced by 15% from 6
     for (let i = 0; i < positions.length; i += 3) {
         // Only draw connections for visible particles
         if (opacities[i / 3] > 0.1) {
