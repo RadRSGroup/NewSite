@@ -18,16 +18,29 @@ const velocities = new Float32Array(particleCount * 3);
 // Initialize particles with dramatically enhanced depth variation
 for (let i = 0; i < particleCount; i++) {
     // Random positions with dramatically increased Z-spread and stronger clustering
-    const zCluster = Math.random() < 0.3 ? 3.0 : 0.8; // Even stronger clustering with more variation
-    positions[i * 3] = (Math.random() - 0.5) * 100; // Further increased spread
-    positions[i * 3 + 1] = (Math.random() - 0.5) * 100;
-    positions[i * 3 + 2] = (Math.random() - 0.5) * 150 * zCluster; // Further increased Z-spread
+    const clusterChance = Math.random();
+    let zCluster;
+    if (clusterChance < 0.2) {
+        zCluster = 4.0; // Very tight clusters
+    } else if (clusterChance < 0.4) {
+        zCluster = 2.5; // Medium clusters
+    } else {
+        zCluster = 0.6; // More spread out
+    }
     
-    // Random velocities with stronger Z-based variation
+    // Add XY clustering
+    const xyCluster = clusterChance < 0.3 ? 0.4 : 1.0; // Tight XY clusters for some particles
+    
+    positions[i * 3] = (Math.random() - 0.5) * 100 * xyCluster; // Apply XY clustering
+    positions[i * 3 + 1] = (Math.random() - 0.5) * 100 * xyCluster;
+    positions[i * 3 + 2] = (Math.random() - 0.5) * 150 * zCluster; // Further increased Z-spread with stronger clustering
+    
+    // Random velocities with stronger Z-based variation and cluster-based movement
     const zFactor = 1 + (positions[i * 3 + 2] / 50); // Adjusted for new Z range
-    velocities[i * 3] = (Math.random() - 0.5) * 0.15 * zFactor; // Further reduced base velocity from 0.2
-    velocities[i + 1] = (Math.random() - 0.5) * 0.15 * zFactor;
-    velocities[i + 2] = (Math.random() - 0.5) * 0.15 * zFactor;
+    const clusterSpeed = zCluster > 2.0 ? 0.8 : 1.0; // Slower movement in tight clusters
+    velocities[i * 3] = (Math.random() - 0.5) * 0.15 * zFactor * clusterSpeed;
+    velocities[i + 1] = (Math.random() - 0.5) * 0.15 * zFactor * clusterSpeed;
+    velocities[i + 2] = (Math.random() - 0.5) * 0.15 * zFactor * clusterSpeed;
     
     // Enhanced color with stronger depth-based variation
     const zPos = positions[i * 3 + 2];
