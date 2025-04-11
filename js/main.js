@@ -173,8 +173,8 @@ document.addEventListener('DOMContentLoaded', function() {
             // Calculate target rotations based on cursor position relative to center
             const centerX = window.innerWidth / 2;
             const centerY = window.innerHeight / 2;
-            targetRotationY = ((mouseX - centerX) / centerX) * 65; // max 65 degrees
-            targetRotationX = ((mouseY - centerY) / centerY) * -65; // max 65 degrees
+            targetRotationY = ((mouseX - centerX) / centerX) * 25; // max 25 degrees
+            targetRotationX = ((mouseY - centerY) / centerY) * -25; // max 25 degrees
         });
     }
 
