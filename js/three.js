@@ -6,9 +6,21 @@ document.addEventListener('DOMContentLoaded', function() {
         alpha: true,
         antialias: true 
     });
-    renderer.setSize(window.innerWidth, window.innerHeight);
+    
+    // Get the canvas container and its dimensions
+    const container = document.getElementById('canvas-container');
+    const containerRect = container.getBoundingClientRect();
+    
+    // Set renderer size to container size instead of window
+    renderer.setSize(containerRect.width, containerRect.height);
     renderer.setClearColor(0x000000, 0);
-    document.getElementById('canvas-container').appendChild(renderer.domElement);
+    container.appendChild(renderer.domElement);
+
+    // Set canvas style
+    renderer.domElement.style.position = 'absolute';
+    renderer.domElement.style.top = '0';
+    renderer.domElement.style.left = '0';
+    renderer.domElement.style.pointerEvents = 'none';
 
     // Create particles
     const particlesGeometry = new THREE.BufferGeometry();
