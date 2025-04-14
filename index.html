@@ -3,52 +3,64 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>RS Group - Lean Technology Solutions</title>
-    <link rel="icon" type="image/svg+xml" href="images/logo.svg">
+    <meta name="description" content="RS Group - Innovative Solutions for Modern Business">
+    <title>RS Group - Innovative Solutions</title>
+    
+    <!-- Preload critical assets -->
+    <link rel="preload" href="css/styles.css" as="style">
+    
+    <!-- Styles -->
     <link rel="stylesheet" href="css/styles.css">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.7.1/gsap.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.7.1/ScrollTrigger.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+    
+    <!-- Scripts -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <script src="js/particles.js" defer></script>
     <script src="js/main.js" defer></script>
-    <script src="js/email.js" defer></script>
 </head>
 <body>
+    <!-- Skip to main content link for accessibility -->
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+
+    <!-- Header -->
     <header class="header">
-        <nav class="nav">
-            <div class="logo">
-                <img src="images/logo.svg" alt="RS Group Logo" class="logo-img">
-            </div>
-            <ul class="nav-links">
-                <li><a href="#home">Home</a></li>
-                <li><a href="#about">About</a></li>
-                <li><a href="#services">Services</a></li>
-                <li><a href="#contact">Contact</a></li>
-            </ul>
-        </nav>
+        <div class="container">
+            <a href="#" class="logo">
+                <img src="images/logo.svg" alt="RS Group Logo">
+            </a>
+            <nav class="nav">
+                <button class="mobile-menu-toggle" aria-label="Toggle menu" aria-expanded="false">
+                    <span class="menu-icon"></span>
+                </button>
+                <ul class="nav-links">
+                    <li><a href="#home" class="nav-link">Home</a></li>
+                    <li><a href="#about" class="nav-link">About</a></li>
+                    <li><a href="#services" class="nav-link">Services</a></li>
+                    <li><a href="#contact" class="nav-link">Contact</a></li>
+                </ul>
+            </nav>
+        </div>
     </header>
 
-    <main>
+    <!-- Main Content -->
+    <main id="main-content" role="main">
+        <!-- Hero Section -->
         <section id="home" class="hero">
             <div class="hero-content">
                 <h1>RS Group</h1>
                 <p>Transforming Institutional Knowledge into Innovative Solutions</p>
             </div>
-            <div id="canvas-container"></div>
+            <div id="canvas-container" aria-hidden="true"></div>
         </section>
 
+        <!-- About Section -->
         <section id="about" class="about">
             <div class="about-content">
                 <h2>We are Doers.</h2>
                 <div class="about-grid">
                     <div class="about-text">
                         <p class="lead">We started out like many of our clients, following our dreams. We have started businesses, built companies and sold or closed them. We have felt the joy of success and the sting of failure.</p>
-                        
                         <p>We know you; Leaders that make it happen and drive success. You are where the buck stops.</p>
-                        
                         <p>Whether you are called Founder, Owner, President, or CEO, we share your passion for business and the opportunity it creates to make the world a better place. We make our dent in the world helping your company succeed.</p>
-                        
                         <p class="salute">We salute you.</p>
                     </div>
                     <div class="about-highlights">
@@ -61,100 +73,78 @@
             </div>
         </section>
 
-        <section id="principles" class="principles">
-            <h2>Lean & Agile Excellence</h2>
-            <div class="principles-grid">
-                <div class="principle-card">
-                    <h3>
-                        <svg class="principle-icon" viewBox="0 0 24 24">
-                            <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"></path>
-                        </svg>
-                        Value Stream Mapping
-                    </h3>
-                    <p>We identify opportunities where technology can eliminate waste and enhance value creation, always prioritizing your team's expertise and capabilities. Our approach combines traditional Lean principles with cutting-edge technology to create optimized workflows that adapt to your specific needs.</p>
-                </div>
-                <div class="principle-card">
-                    <h3>
-                        <svg class="principle-icon" viewBox="0 0 24 24">
-                            <path d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9"></path>
-                        </svg>
-                        Human-Centered Integration
-                    </h3>
-                    <p>Technology should enhance, not replace, human capabilities. We focus on solutions that augment your team's strengths and institutional knowledge. Our custom tools are designed to work with your existing processes, not against them, ensuring seamless adoption and maximum value.</p>
-                </div>
-                <div class="principle-card">
-                    <h3>
-                        <svg class="principle-icon" viewBox="0 0 24 24">
-                            <path d="M4 5a1 1 0 011-1h14a1 1 0 011 1v2a1 1 0 01-1 1H5a1 1 0 01-1-1V5zm0 8a1 1 0 011-1h14a1 1 0 011 1v2a1 1 0 01-1 1H5a1 1 0 01-1-1v-2zm0 8a1 1 0 011-1h14a1 1 0 011 1v2a1 1 0 01-1 1H5a1 1 0 01-1-1v-2z"></path>
-                        </svg>
-                        Agile Adaptation
-                    </h3>
-                    <p>Our Agile approach ensures rapid, iterative improvements while maintaining alignment with your organization's goals and culture. We create scalable solutions that grow with your business, from simple automation tools to complex enterprise systems, all designed to fit your budget and timeline.</p>
-                </div>
-            </div>
-        </section>
-
+        <!-- Services Section -->
         <section id="services" class="services">
             <h2>Professional Services</h2>
             <div class="project-grid">
-                <div class="project-card">
+                <article class="project-card">
                     <div class="project-header">
                         <svg class="project-icon" viewBox="0 0 24 24" width="24" height="24">
                             <path d="M3 3h18v18H3V3zm16 16V5H5v14h14zM7 7h10v2H7V7zm0 4h10v2H7v-2zm0 4h7v2H7v-2z"/>
                         </svg>
-                        <h3>Lean Implementation</h3>
+                        <h3>Value Stream Analysis</h3>
                     </div>
-                    <p>Strategic integration of Lean methodologies with your existing processes for maximum efficiency and minimal waste. We create custom tools and workflows that leverage the latest technologies while respecting your budget constraints.</p>
+                    <p>Strategic analysis of your business processes to identify optimal technology implementation points that maximize ROI and operational efficiency.</p>
                     <div class="project-stats">
                         <span class="stat">
-                            <span class="stat-count">30%</span>
+                            <span class="stat-count">40%</span>
                             <span class="stat-label">Efficiency Gain</span>
                         </span>
                         <span class="stat">
-                            <span class="stat-count">40%</span>
+                            <span class="stat-count">35%</span>
                             <span class="stat-label">Cost Reduction</span>
                         </span>
                     </div>
-                    <div class="project-tags">
-                        <span class="tag">Process Optimization</span>
-                        <span class="tag">Waste Reduction</span>
-                        <span class="tag">Value Stream</span>
-                    </div>
-                </div>
+                </article>
 
-                <div class="project-card">
+                <article class="project-card">
                     <div class="project-header">
                         <svg class="project-icon" viewBox="0 0 16 16" width="16" height="16">
                             <path d="M8 0a8 8 0 100 16A8 8 0 008 0zM4.5 7.5a.5.5 0 01.5-.5h2V5H5a1 1 0 00-1 1v4a1 1 0 001 1h2v-2H5a.5.5 0 01-.5-.5v-1zm3.5-.5h2a.5.5 0 01.5.5v1a.5.5 0 01-.5.5H8v2h2a1 1 0 001-1V6a1 1 0 00-1-1H8v2z"></path>
                         </svg>
-                        <h3>Knowledge Integration</h3>
+                        <h3>Human-Centered AI Integration</h3>
                     </div>
-                    <p>Seamlessly blend your institutional expertise with modern solutions, preserving and enhancing your organizational knowledge. Our tools are designed to capture and leverage your team's unique insights while introducing new capabilities.</p>
+                    <p>Seamless integration of AI solutions that enhance and preserve institutional knowledge while adapting to existing workflows and behaviors.</p>
                     <div class="project-stats">
                         <span class="stat">
                             <span class="stat-count">95%</span>
                             <span class="stat-label">Knowledge Retention</span>
                         </span>
                         <span class="stat">
-                            <span class="stat-count">85%</span>
+                            <span class="stat-count">90%</span>
                             <span class="stat-label">Adoption Rate</span>
                         </span>
                     </div>
-                    <div class="project-tags">
-                        <span class="tag">Knowledge Management</span>
-                        <span class="tag">Process Integration</span>
-                        <span class="tag">Change Management</span>
-                    </div>
-                </div>
+                </article>
 
-                <div class="project-card">
+                <article class="project-card">
                     <div class="project-header">
                         <svg class="project-icon" viewBox="0 0 16 16" width="16" height="16">
                             <path d="M7.467.133a1.75 1.75 0 011.066 0l5.25 1.68A1.75 1.75 0 0115 3.48V7c0 1.566-.32 3.182-1.303 4.682-.983 1.498-2.585 2.813-5.032 3.855a1.7 1.7 0 01-1.33 0c-2.447-1.042-4.049-2.357-5.032-3.855C1.32 10.182 1 8.566 1 7V3.48a1.75 1.75 0 011.217-1.667l5.25-1.68zm.61 1.429a.25.25 0 00-.153 0l-5.25 1.68a.25.25 0 00-.174.238V7c0 1.358.275 2.666 1.057 3.86.784 1.194 2.121 2.34 4.366 3.297a.2.2 0 00.154 0c2.245-.956 3.582-2.104 4.366-3.298C13.225 9.666 13.5 8.36 13.5 7V3.48a.25.25 0 00-.174-.237l-5.25-1.68zM8 5.25a.75.75 0 01.75.75v2.5a.75.75 0 01-1.5 0V6A.75.75 0 018 5.25zm0 6a1 1 0 100-2 1 1 0 000 2z"></path>
                         </svg>
-                        <h3>Sustainable Solutions</h3>
+                        <h3>Revenue-Focused Process Design</h3>
                     </div>
-                    <p>Build resilient, scalable systems that grow with your organization while maintaining operational excellence. Our solutions are designed to be cost-effective and adaptable, ensuring they remain valuable as your needs evolve.</p>
+                    <p>Development of business processes that prioritize revenue generation and customer value, ensuring sustainable growth and profitability.</p>
+                    <div class="project-stats">
+                        <span class="stat">
+                            <span class="stat-count">50%</span>
+                            <span class="stat-label">Revenue Growth</span>
+                        </span>
+                        <span class="stat">
+                            <span class="stat-count">45%</span>
+                            <span class="stat-label">Customer Retention</span>
+                        </span>
+                    </div>
+                </article>
+
+                <article class="project-card">
+                    <div class="project-header">
+                        <svg class="project-icon" viewBox="0 0 24 24" width="24" height="24">
+                            <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
+                        </svg>
+                        <h3>Scalable Technology Solutions</h3>
+                    </div>
+                    <p>Implementation of flexible technology solutions that grow with your business, designed to fit any budget while maintaining enterprise-grade capabilities.</p>
                     <div class="project-stats">
                         <span class="stat">
                             <span class="stat-count">99.9%</span>
@@ -165,12 +155,7 @@
                             <span class="stat-label">Scalability</span>
                         </span>
                     </div>
-                    <div class="project-tags">
-                        <span class="tag">Continuous Improvement</span>
-                        <span class="tag">Adaptability</span>
-                        <span class="tag">Enterprise Scale</span>
-                    </div>
-                </div>
+                </article>
             </div>
         </section>
 
@@ -178,57 +163,88 @@
             <div class="container">
                 <h2>Our Methodology</h2>
                 <div class="methodology-content">
-                    <div class="methodology-grid">
-                        <div class="methodology-step">
-                            <div class="step-content">
-                                <span class="step-number">01</span>
-                                <h3>Discovery & Assessment</h3>
-                                <p>We begin by understanding your organization's unique processes, culture, and institutional knowledge. Mapping how your company creates value, we identify areas where technology can have the most significant positive impact on your team's effectiveness, always considering budget constraints and ROI.</p>
-                            </div>
+                    <div class="methodology-card glass-card">
+                        <div class="methodology-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
+                            </svg>
                         </div>
-                        <div class="methodology-step">
-                            <div class="step-content">
-                                <span class="step-number">02</span>
-                                <h3>Lean Analysis & Design</h3>
-                                <p>Using Lean principles, we design solutions that eliminate waste while preserving and enhancing your team's valuable expertise. Our focus is on creating systems that amplify human capabilities rather than replacing them, with solutions that fit your budget and scale with your growth.</p>
-                            </div>
+                        <h3>LEAN Development</h3>
+                        <p>We embrace LEAN principles to eliminate waste, optimize processes, and deliver maximum value to our clients. Our approach focuses on continuous improvement and efficiency at every stage of development.</p>
+                        <ul class="methodology-list">
+                            <li>Value Stream Mapping</li>
+                            <li>Continuous Flow</li>
+                            <li>Pull Systems</li>
+                            <li>Perfection Through Iteration</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="methodology-card glass-card">
+                        <div class="methodology-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
+                            </svg>
                         </div>
-                        <div class="methodology-step">
-                            <div class="step-content">
-                                <span class="step-number">03</span>
-                                <h3>Agile Implementation</h3>
-                                <p>Through iterative sprints and continuous feedback, we ensure that solutions are adopted smoothly and effectively. Our Agile approach allows for rapid adjustments based on real-world usage and team feedback, ensuring we deliver maximum value within your budget constraints.</p>
-                            </div>
-                        </div>
-                        <div class="methodology-step">
-                            <div class="step-content">
-                                <span class="step-number">04</span>
-                                <h3>Continuous Improvement</h3>
-                                <p>We establish sustainable practices for ongoing optimization, ensuring your team can continue to evolve and improve processes while maintaining the human element that makes your organization unique. Our solutions are designed to grow with you, providing long-term value at any scale.</p>
-                            </div>
-                        </div>
+                        <h3>Agile Excellence</h3>
+                        <p>Our Agile methodology ensures rapid delivery, continuous feedback, and adaptive planning. We maintain flexibility while keeping projects on track and aligned with business goals.</p>
+                        <ul class="methodology-list">
+                            <li>Sprint Planning & Reviews</li>
+                            <li>Daily Stand-ups</li>
+                            <li>Continuous Integration</li>
+                            <li>Adaptive Planning</li>
+                        </ul>
                     </div>
                 </div>
             </div>
         </section>
 
+        <section class="results">
+            <div class="container">
+                <h2>Proven Results</h2>
+                <div class="results-grid">
+                    <div class="result-card card-3d">
+                        <div class="result-number">98%</div>
+                        <h3>Client Satisfaction</h3>
+                        <p>Consistent delivery of high-quality solutions that exceed expectations</p>
+                    </div>
+                    <div class="result-card card-3d">
+                        <div class="result-number">45%</div>
+                        <h3>Faster Delivery</h3>
+                        <p>Reduced time-to-market through efficient processes</p>
+                    </div>
+                    <div class="result-card card-3d">
+                        <div class="result-number">30%</div>
+                        <h3>Cost Reduction</h3>
+                        <p>Optimized resource utilization and waste elimination</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Contact Section -->
         <section id="contact" class="contact">
             <h2>Contact Us</h2>
-            <form class="contact-form">
-                <input type="text" name="name" placeholder="Name" required>
-                <input type="email" name="email" placeholder="Email" required>
-                <textarea name="message" placeholder="Message" required></textarea>
-                <button type="submit">Send Message</button>
+            <form class="contact-form" id="contact-form">
+                <div class="form-group">
+                    <label for="name">Name</label>
+                    <input type="text" id="name" name="name" required>
+                </div>
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input type="email" id="email" name="email" required>
+                </div>
+                <div class="form-group">
+                    <label for="message">Message</label>
+                    <textarea id="message" name="message" required></textarea>
+                </div>
+                <button type="submit" class="submit-btn">Send Message</button>
             </form>
         </section>
     </main>
 
-    <footer class="footer">
+    <!-- Footer -->
+    <footer class="footer" role="contentinfo">
         <p>&copy; 2025 RS Group. All rights reserved.</p>
     </footer>
-
-    <script src="js/three.js"></script>
-    <script src="js/main.js"></script>
-    <script src="js/email.js"></script>
 </body>
 </html> 

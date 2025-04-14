@@ -1,190 +1,125 @@
-// Initialize Three.js scene
-let scene, camera, renderer, particles, subtleParticles;
-let mouseX = 0;
-let mouseY = 0;
-let isInteracting = false;
-let rafId = null;
+// Three.js Particle System
+let scene, camera, renderer, particles;
+const particleCount = 2000;
 
-// Create scene
-function initScene() {
+function createRoundParticleTexture() {
+    const canvas = document.createElement('canvas');
+    canvas.width = 64;
+    canvas.height = 64;
+    const context = canvas.getContext('2d');
+    
+    // Create soft glowing gradient with internal structure
+    const gradient = context.createRadialGradient(32, 32, 0, 32, 32, 32);
+    gradient.addColorStop(0, 'rgba(255, 255, 255, 1)');
+    gradient.addColorStop(0.1, 'rgba(255, 255, 255, 0.95)');
+    gradient.addColorStop(0.2, 'rgba(255, 255, 255, 0.8)');
+    gradient.addColorStop(0.4, 'rgba(255, 255, 255, 0.5)');
+    gradient.addColorStop(0.6, 'rgba(255, 255, 255, 0.3)');
+    gradient.addColorStop(1, 'rgba(255, 255, 255, 0)');
+    
+    // Draw main glow
+    context.fillStyle = gradient;
+    context.beginPath();
+    context.arc(32, 32, 32, 0, Math.PI * 2);
+    context.fill();
+    
+    // Add internal structure
+    const innerGradient = context.createRadialGradient(32, 32, 0, 32, 32, 16);
+    innerGradient.addColorStop(0, 'rgba(255, 255, 255, 0.9)');
+    innerGradient.addColorStop(0.5, 'rgba(255, 255, 255, 0.5)');
+    innerGradient.addColorStop(1, 'rgba(255, 255, 255, 0)');
+    
+    context.fillStyle = innerGradient;
+    context.beginPath();
+    context.arc(32, 32, 16, 0, Math.PI * 2);
+    context.fill();
+    
+    return canvas;
+}
+
+function initParticles() {
+    // Scene setup
     scene = new THREE.Scene();
     camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-    camera.position.z = 5;
-    
-    renderer = new THREE.WebGLRenderer({
+    renderer = new THREE.WebGLRenderer({ 
         alpha: true,
         antialias: true,
         powerPreference: 'high-performance'
     });
-    renderer.setSize(window.innerWidth, window.innerHeight);
-    renderer.setClearColor(0x000000, 0);
+    
+    // Set canvas size and position
+    const canvasContainer = document.getElementById('canvas-container');
+    renderer.setSize(canvasContainer.offsetWidth, canvasContainer.offsetHeight);
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-    
-    const container = document.getElementById('canvas-container');
-    if (container) {
-        container.appendChild(renderer.domElement);
+    renderer.setClearColor(0x000000, 0);
+    canvasContainer.appendChild(renderer.domElement);
+
+    // Particle geometry
+    const geometry = new THREE.BufferGeometry();
+    const positions = new Float32Array(particleCount * 3);
+    const colors = new Float32Array(particleCount * 3);
+    const sizes = new Float32Array(particleCount);
+
+    // Create particles in a simple distribution
+    for (let i = 0; i < particleCount; i++) {
+        // Random position in a cube
+        positions[i * 3] = (Math.random() - 0.5) * 10;
+        positions[i * 3 + 1] = (Math.random() - 0.5) * 10;
+        positions[i * 3 + 2] = (Math.random() - 0.5) * 10;
+
+        // Enhanced color scheme with subtle variations
+        const baseBlue = 0.4; // Increased base blue value
+        const variation = Math.random() * 0.15; // Increased variation
+        colors[i * 3] = 0.15 + variation;     // R
+        colors[i * 3 + 1] = 0.15 + variation; // G
+        colors[i * 3 + 2] = baseBlue + variation; // B
+
+        // Slightly varied sizes for depth
+        sizes[i] = 0.15 + Math.random() * 0.05;
     }
 
-    // Add mouse movement listener with throttling
-    let lastTime = 0;
-    const throttleDelay = 16; // ~60fps
+    geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+    geometry.setAttribute('color', new THREE.BufferAttribute(colors, 3));
+    geometry.setAttribute('size', new THREE.BufferAttribute(sizes, 1));
 
-    function handleMouseMove(event) {
-        const currentTime = performance.now();
-        if (currentTime - lastTime >= throttleDelay) {
-            mouseX = (event.clientX / window.innerWidth) * 2 - 1;
-            mouseY = -(event.clientY / window.innerHeight) * 2 + 1;
-            lastTime = currentTime;
-        }
-    }
+    // Create round particle texture
+    const particleTexture = new THREE.CanvasTexture(createRoundParticleTexture());
 
-    document.addEventListener('mousemove', handleMouseMove, { passive: true });
-
-    // Add touch events with throttling
-    document.addEventListener('touchstart', (event) => {
-        isInteracting = true;
-        const touch = event.touches[0];
-        mouseX = (touch.clientX / window.innerWidth) * 2 - 1;
-        mouseY = -(touch.clientY / window.innerHeight) * 2 + 1;
-    }, { passive: true });
-
-    document.addEventListener('touchmove', (event) => {
-        if (isInteracting) {
-            const touch = event.touches[0];
-            mouseX = (touch.clientX / window.innerWidth) * 2 - 1;
-            mouseY = -(touch.clientY / window.innerHeight) * 2 + 1;
-        }
-    }, { passive: true });
-
-    document.addEventListener('touchend', () => {
-        isInteracting = false;
-    }, { passive: true });
-}
-
-// Create main particles with reduced count
-function createParticles() {
-    const particlesGeometry = new THREE.BufferGeometry();
-    const particlesCount = 1000; // Reduced from 2000
-    const posArray = new Float32Array(particlesCount * 3);
-    const colorsArray = new Float32Array(particlesCount * 3);
-    
-    for (let i = 0; i < particlesCount * 3; i += 3) {
-        // Position
-        posArray[i] = (Math.random() - 0.5) * 10;
-        posArray[i + 1] = (Math.random() - 0.5) * 10;
-        posArray[i + 2] = (Math.random() - 0.5) * 10;
-        
-        // Color - white with slight variation
-        colorsArray[i] = 1.0;
-        colorsArray[i + 1] = 1.0;
-        colorsArray[i + 2] = 1.0;
-    }
-    
-    particlesGeometry.setAttribute('position', new THREE.BufferAttribute(posArray, 3));
-    particlesGeometry.setAttribute('color', new THREE.BufferAttribute(colorsArray, 3));
-    
-    const particlesMaterial = new THREE.PointsMaterial({
-        size: 0.02,
+    // Particle material with enhanced settings
+    const material = new THREE.PointsMaterial({
+        size: 0.15,
+        map: particleTexture,
         vertexColors: true,
         transparent: true,
-        opacity: 0.8,
+        opacity: 0.95, // Increased opacity
         blending: THREE.AdditiveBlending,
+        depthWrite: false,
         sizeAttenuation: true
     });
-    
-    particles = new THREE.Points(particlesGeometry, particlesMaterial);
+
+    // Create particles
+    particles = new THREE.Points(geometry, material);
     scene.add(particles);
+
+    // Camera position
+    camera.position.z = 5;
 }
 
-// Create subtle particles with reduced count
-function createSubtleParticles() {
-    const particlesGeometry = new THREE.BufferGeometry();
-    const particlesCount = 1000; // Reduced from 2000
-    const posArray = new Float32Array(particlesCount * 3);
-    const colorsArray = new Float32Array(particlesCount * 3);
-    
-    for (let i = 0; i < particlesCount * 3; i += 3) {
-        // Position
-        posArray[i] = (Math.random() - 0.5) * 12;
-        posArray[i + 1] = (Math.random() - 0.5) * 12;
-        posArray[i + 2] = (Math.random() - 0.5) * 12;
-        
-        // Color - red
-        colorsArray[i] = 1.0;
-        colorsArray[i + 1] = 0.1;
-        colorsArray[i + 2] = 0.1;
-    }
-    
-    particlesGeometry.setAttribute('position', new THREE.BufferAttribute(posArray, 3));
-    particlesGeometry.setAttribute('color', new THREE.BufferAttribute(colorsArray, 3));
-    
-    const particlesMaterial = new THREE.PointsMaterial({
-        size: 0.03,
-        vertexColors: true,
-        transparent: true,
-        opacity: 0.6,
-        blending: THREE.AdditiveBlending,
-        sizeAttenuation: true
-    });
-    
-    subtleParticles = new THREE.Points(particlesGeometry, particlesMaterial);
-    scene.add(subtleParticles);
-}
+function animateParticles() {
+    requestAnimationFrame(animateParticles);
 
-// Animation loop with performance optimization
-function animate() {
-    rafId = requestAnimationFrame(animate);
-    
-    // Only rotate particles when interacting
-    if (isInteracting) {
-        if (particles) {
-            particles.rotation.x += mouseY * 0.0005;
-            particles.rotation.y += mouseX * 0.0005;
-        }
-        
-        if (subtleParticles) {
-            subtleParticles.rotation.x -= mouseY * 0.0003;
-            subtleParticles.rotation.y -= mouseX * 0.0003;
-        }
-    }
-    
+    // Simple rotation with subtle variation
+    const time = Date.now() * 0.001;
+    particles.rotation.x += 0.0005 + Math.sin(time * 0.1) * 0.0001;
+    particles.rotation.y += 0.0005 + Math.cos(time * 0.1) * 0.0001;
+
     renderer.render(scene, camera);
 }
 
-// Handle window resize with debouncing
-let resizeTimeout;
-function onWindowResize() {
-    clearTimeout(resizeTimeout);
-    resizeTimeout = setTimeout(() => {
-        camera.aspect = window.innerWidth / window.innerHeight;
-        camera.updateProjectionMatrix();
-        renderer.setSize(window.innerWidth, window.innerHeight);
-    }, 250);
-}
-
-// Cleanup function
-function cleanup() {
-    if (rafId) {
-        cancelAnimationFrame(rafId);
+// Initialize particles when DOM is loaded
+document.addEventListener('DOMContentLoaded', () => {
+    if (document.getElementById('canvas-container')) {
+        initParticles();
+        animateParticles();
     }
-    if (renderer) {
-        renderer.dispose();
-    }
-    if (scene) {
-        scene.clear();
-    }
-}
-
-// Initialize everything
-function init() {
-    initScene();
-    createParticles();
-    createSubtleParticles();
-    animate();
-    
-    window.addEventListener('resize', onWindowResize);
-    window.addEventListener('beforeunload', cleanup);
-}
-
-// Start the application
-init(); 
+}); 
