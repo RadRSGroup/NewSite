@@ -23,10 +23,17 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
         e.preventDefault();
         const target = document.querySelector(this.getAttribute('href'));
         if (target) {
-            target.scrollIntoView({
-                behavior: 'smooth',
-                block: 'start'
+            const headerOffset = 100;
+            const elementPosition = target.getBoundingClientRect().top;
+            const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+
+            window.scrollTo({
+                top: offsetPosition,
+                behavior: 'smooth'
             });
+
+            // Update URL without scrolling
+            history.pushState(null, null, this.getAttribute('href'));
         }
     });
 });
@@ -141,10 +148,17 @@ document.addEventListener('DOMContentLoaded', function() {
             e.preventDefault();
             const target = document.querySelector(this.getAttribute('href'));
             if (target) {
-                target.scrollIntoView({
-                    behavior: 'smooth',
-                    block: 'start'
+                const headerOffset = 100;
+                const elementPosition = target.getBoundingClientRect().top;
+                const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+
+                window.scrollTo({
+                    top: offsetPosition,
+                    behavior: 'smooth'
                 });
+
+                // Update URL without scrolling
+                history.pushState(null, null, this.getAttribute('href'));
             }
         });
     });
@@ -385,4 +399,201 @@ document.querySelectorAll('.stat-count').forEach(stat => {
             burst.remove();
         }, 300);
     });
+});
+
+// Track scroll position for header and animations
+let lastScrollTop = 0;
+const header = document.querySelector('.header');
+const scrollThreshold = 50;
+
+function handleScroll() {
+    const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+    
+    // Header scroll effect
+    if (scrollTop > scrollThreshold) {
+        header.classList.add('scrolled');
+    } else {
+        header.classList.remove('scrolled');
+    }
+    
+    // Update last scroll position
+    lastScrollTop = scrollTop;
+}
+
+// Use passive event listener for better performance
+window.addEventListener('scroll', handleScroll, { passive: true });
+
+// Initialize scroll position
+handleScroll();
+
+// Ensure smooth scrolling is supported
+if ('scrollBehavior' in document.documentElement.style) {
+    document.documentElement.style.scrollBehavior = 'smooth';
+} else {
+    // Fallback for browsers that don't support smooth scrolling
+    const smoothScroll = (target, duration) => {
+        const targetPosition = target.getBoundingClientRect().top;
+        const startPosition = window.pageYOffset;
+        const distance = targetPosition - startPosition;
+        let startTime = null;
+
+        function animation(currentTime) {
+            if (startTime === null) startTime = currentTime;
+            const timeElapsed = currentTime - startTime;
+            const run = ease(timeElapsed, startPosition, distance, duration);
+            window.scrollTo(0, run);
+            if (timeElapsed < duration) requestAnimationFrame(animation);
+        }
+
+        function ease(t, b, c, d) {
+            t /= d / 2;
+            if (t < 1) return c / 2 * t * t + b;
+            t--;
+            return -c / 2 * (t * (t - 2) - 1) + b;
+        }
+
+        requestAnimationFrame(animation);
+    };
+
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function (e) {
+            e.preventDefault();
+            const target = document.querySelector(this.getAttribute('href'));
+            if (target) {
+                smoothScroll(target, 1000);
+            }
+        });
+    });
+}
+
+// Intersection Observer for fade-in animations
+const observerOptions = {
+    root: null,
+    rootMargin: '0px',
+    threshold: 0.1
+};
+
+const observer = new IntersectionObserver((entries, observer) => {
+    entries.forEach(entry => {
+        if (entry.isIntersecting) {
+            entry.target.classList.add('visible');
+            observer.unobserve(entry.target);
+        }
+    });
+}, observerOptions);
+
+// Observe elements with fade-in class
+document.querySelectorAll('.fade-in').forEach(element => {
+    observer.observe(element);
+});
+
+// Add parallax effect to hero section
+const hero = document.querySelector('.hero');
+window.addEventListener('scroll', () => {
+    const scrolled = window.pageYOffset;
+    hero.style.transform = `translateY(${scrolled * 0.5}px)`;
+});
+
+// Add hover effect to project cards
+document.querySelectorAll('.project-card').forEach(card => {
+    card.addEventListener('mouseenter', () => {
+        card.style.transform = 'translateY(-10px)';
+    });
+    
+    card.addEventListener('mouseleave', () => {
+        card.style.transform = 'translateY(0)';
+    });
+});
+
+// Add loading animation
+window.addEventListener('load', () => {
+    document.body.classList.add('loaded');
+});
+
+// Add scroll progress indicator
+const progressBar = document.createElement('div');
+progressBar.className = 'progress-bar';
+document.body.appendChild(progressBar);
+
+window.addEventListener('scroll', () => {
+    const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+    const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+    const scrolled = (winScroll / height) * 100;
+    progressBar.style.width = scrolled + '%';
+});
+
+// Add custom cursor
+const customCursor = document.createElement('div');
+customCursor.className = 'cursor';
+document.body.appendChild(customCursor);
+
+document.addEventListener('mousemove', (e) => {
+    customCursor.style.left = e.clientX + 'px';
+    customCursor.style.top = e.clientY + 'px';
+});
+
+document.addEventListener('mousedown', () => {
+    customCursor.classList.add('active');
+});
+
+document.addEventListener('mouseup', () => {
+    customCursor.classList.remove('active');
+});
+
+// Add GSAP animations
+gsap.registerPlugin(ScrollTrigger);
+
+// Animate hero content
+gsap.from('.hero-content', {
+    duration: 1,
+    y: 50,
+    opacity: 0,
+    ease: 'power3.out'
+});
+
+// Animate about section
+gsap.from('.about-content', {
+    scrollTrigger: {
+        trigger: '.about',
+        start: 'top center',
+        toggleActions: 'play none none reverse'
+    },
+    duration: 1,
+    y: 50,
+    opacity: 0,
+    ease: 'power3.out'
+});
+
+// Animate services section
+gsap.from('.project-card', {
+    scrollTrigger: {
+        trigger: '.services',
+        start: 'top center',
+        toggleActions: 'play none none reverse'
+    },
+    duration: 0.8,
+    y: 50,
+    opacity: 0,
+    stagger: 0.2,
+    ease: 'power3.out'
+});
+
+// Add smooth page transitions
+document.querySelectorAll('a').forEach(link => {
+    if (link.href && link.href.includes('#')) {
+        link.addEventListener('click', (e) => {
+            e.preventDefault();
+            const target = document.querySelector(link.getAttribute('href'));
+            if (target) {
+                gsap.to(window, {
+                    duration: 1,
+                    scrollTo: {
+                        y: target,
+                        offsetY: 70
+                    },
+                    ease: 'power3.inOut'
+                });
+            }
+        });
+    }
 }); 
