@@ -1,300 +1,157 @@
-// Three.js Background Animation
-const scene = new THREE.Scene();
-const camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 1000);
-const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
-const container = document.getElementById('canvas-container');
+// Three.js Particle Animation
+document.addEventListener('DOMContentLoaded', function() {
+    const scene = new THREE.Scene();
+    const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+    const renderer = new THREE.WebGLRenderer({ 
+        alpha: true,
+        antialias: true 
+    });
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    renderer.setClearColor(0x000000, 0);
+    document.getElementById('canvas-container').appendChild(renderer.domElement);
 
-renderer.setSize(window.innerWidth, window.innerHeight);
-container.appendChild(renderer.domElement);
+    // Create particles
+    const particlesGeometry = new THREE.BufferGeometry();
+    const particlesCount = 5000;
+    const posArray = new Float32Array(particlesCount * 3);
+    const colorsArray = new Float32Array(particlesCount * 3);
+    const sizesArray = new Float32Array(particlesCount);
 
-// Create particle system
-const particleCount = 2346;
-const particles = new THREE.BufferGeometry();
-const positions = new Float32Array(particleCount * 3);
-const colors = new Float32Array(particleCount * 3);
-const sizes = new Float32Array(particleCount);
-const velocities = new Float32Array(particleCount * 3);
-const opacities = new Float32Array(particleCount);
-const fadeStates = new Float32Array(particleCount);
-const fadeSpeeds = new Float32Array(particleCount);
-const inertias = new Float32Array(particleCount);
-const masses = new Float32Array(particleCount); // New array for particle masses
+    for (let i = 0; i < particlesCount; i++) {
+        // Position
+        const i3 = i * 3;
+        posArray[i3] = (Math.random() - 0.5) * 10;
+        posArray[i3 + 1] = (Math.random() - 0.5) * 10;
+        posArray[i3 + 2] = (Math.random() - 0.5) * 10;
 
-// Initialize particles with dramatically enhanced depth variation
-for (let i = 0; i < particleCount; i++) {
-    // Random positions with dramatically increased Z-spread and stronger clustering
-    const clusterChance = Math.random();
-    let zCluster;
-    if (clusterChance < 0.35) {
-        zCluster = 7.0; // Very tight clusters
-    } else if (clusterChance < 0.55) {
-        zCluster = 5.0; // Tight clusters
-    } else if (clusterChance < 0.75) {
-        zCluster = 3.0; // Medium clusters
-    } else if (clusterChance < 0.9) {
-        zCluster = 1.5; // Loose clusters
-    } else {
-        zCluster = 0.3; // Very spread out
+        // Color - Set all particles to bright white
+        colorsArray[i3] = 1.0;     // R
+        colorsArray[i3 + 1] = 1.0; // G
+        colorsArray[i3 + 2] = 1.0; // B
+
+        // Size - Make particles smaller
+        sizesArray[i] = Math.random() * 0.005;
     }
-    
-    // Add XY clustering with more levels
-    const xyCluster = clusterChance < 0.3 ? 0.15 : 
-                     (clusterChance < 0.5 ? 0.3 : 
-                     (clusterChance < 0.7 ? 0.5 : 
-                     (clusterChance < 0.9 ? 0.7 : 1.0))); // Five levels of XY clustering
-    
-    positions[i * 3] = (Math.random() - 0.5) * 100 * xyCluster;
-    positions[i * 3 + 1] = (Math.random() - 0.5) * 100 * xyCluster;
-    positions[i * 3 + 2] = (Math.random() - 0.5) * 150 * zCluster;
-    
-    // Initialize fade states for 35 random particles
-    if (i < 35) {
-        fadeStates[i] = Math.random();
-        fadeSpeeds[i] = Math.random() * 0.03 + 0.015;
-        opacities[i] = fadeStates[i];
-    } else {
-        fadeStates[i] = 1;
-        fadeSpeeds[i] = 0;
-        opacities[i] = 1;
-    }
-    
-    // Random velocities with stronger Z-based variation and cluster-based movement
-    const zFactor = 1 + (positions[i * 3 + 2] / 50);
-    const clusterSpeed = zCluster > 4.0 ? 0.6 : (zCluster > 2.0 ? 0.8 : 1.0); // More varied cluster speeds
-    const speedVariation = Math.random() * 0.4 + 0.8; // 20% speed variation
-    inertias[i] = Math.random() * 0.4 + 0.8; // 20% inertia variation
-    
-    // Set particle mass based on clustering
-    masses[i] = zCluster > 4.0 ? 2.0 : (zCluster > 2.0 ? 1.5 : 1.0); // Heavier particles in tight clusters
-    
-    velocities[i * 3] = (Math.random() - 0.5) * 0.15 * zFactor * clusterSpeed * speedVariation;
-    velocities[i + 1] = (Math.random() - 0.5) * 0.15 * zFactor * clusterSpeed * speedVariation;
-    velocities[i + 2] = (Math.random() - 0.5) * 0.15 * zFactor * clusterSpeed * speedVariation;
-    
-    // Enhanced color with stronger depth-based variation
-    const zPos = positions[i * 3 + 2];
-    const depthBrightness = 1 - (Math.abs(zPos) / 150); // Adjusted for new Z range
-    const baseBrightness = Math.random() * 0.9 + 0.1; // Higher minimum brightness
-    const brightness = baseBrightness * depthBrightness;
-    
-    // More vibrant colors with depth
-    colors[i * 3] = 0.99 + brightness * 0.01; // More saturated red
-    colors[i * 3 + 1] = 0.005 + brightness * 0.01; // Further reduced green
-    colors[i * 3 + 2] = 0.005 + brightness * 0.01; // Further reduced blue
-    
-    // Dramatically enhanced size based on Z position with random variation
-    const zSizeFactor = 1 + (zPos / 8); // Further reduced denominator for much stronger size variation
-    const randomSizeVariation = Math.random() * 0.3 + 0.7; // Random size multiplier between 0.7 and 1.0
-    const baseSize = Math.random() * 0.2 + 0.1; // Much larger base size
-    sizes[i] = baseSize * zSizeFactor * randomSizeVariation; // Particles will get dramatically larger when closer with random variation
-}
 
-particles.setAttribute('position', new THREE.BufferAttribute(positions, 3));
-particles.setAttribute('color', new THREE.BufferAttribute(colors, 3));
-particles.setAttribute('size', new THREE.BufferAttribute(sizes, 1));
+    particlesGeometry.setAttribute('position', new THREE.BufferAttribute(posArray, 3));
+    particlesGeometry.setAttribute('color', new THREE.BufferAttribute(colorsArray, 3));
+    particlesGeometry.setAttribute('size', new THREE.BufferAttribute(sizesArray, 1));
 
-const particleMaterial = new THREE.PointsMaterial({
-    size: 0.1,
-    vertexColors: true,
-    transparent: true,
-    opacity: 0.9, // Increased opacity
-    blending: THREE.AdditiveBlending,
-    sizeAttenuation: true
-});
+    const particlesMaterial = new THREE.PointsMaterial({
+        size: 0.005,
+        vertexColors: true,
+        transparent: true,
+        opacity: 1.0,
+        blending: THREE.AdditiveBlending,
+        sizeAttenuation: true
+    });
 
-const particleSystem = new THREE.Points(particles, particleMaterial);
-scene.add(particleSystem);
+    const particlesMesh = new THREE.Points(particlesGeometry, particlesMaterial);
+    scene.add(particlesMesh);
 
-// Create line geometry for connections
-const lineGeometry = new THREE.BufferGeometry();
-const linePositions = new Float32Array(particleCount * 3);
-lineGeometry.setAttribute('position', new THREE.BufferAttribute(linePositions, 3));
+    // Create line system
+    const lineGeometry = new THREE.BufferGeometry();
+    const lineMaterial = new THREE.LineBasicMaterial({
+        color: 0xff0000,
+        transparent: true,
+        opacity: 0.8,
+        blending: THREE.AdditiveBlending,
+        linewidth: 2
+    });
+    const lineSystem = new THREE.LineSegments(lineGeometry, lineMaterial);
+    scene.add(lineSystem);
 
-const lineMaterial = new THREE.LineBasicMaterial({
-    color: 0xffffff, // Changed from 0xff0000 (red) to 0xffffff (white)
-    transparent: true,
-    opacity: 0.1 // Keeping the subtle opacity
-});
+    camera.position.z = 5;
 
-const lineSystem = new THREE.LineSegments(lineGeometry, lineMaterial);
-scene.add(lineSystem);
-
-let mouseX = 0;
-let mouseY = 0;
-let targetX = 0;
-let targetY = 0;
-let targetRotationX = 0;
-let targetRotationY = 0;
-let mouseSpeed = 0;
-
-document.addEventListener('mousemove', (event) => {
-    const prevMouseX = mouseX;
-    const prevMouseY = mouseY;
-    mouseX = (event.clientX - window.innerWidth / 2) / window.innerWidth;
-    mouseY = (event.clientY - window.innerHeight / 2) / window.innerHeight;
-    mouseSpeed = Math.sqrt(
-        Math.pow(mouseX - prevMouseX, 2) + 
-        Math.pow(mouseY - prevMouseY, 2)
-    ) * 30;
-    
-    // Increased rotation targets by 30%
-    targetRotationX = mouseY * 0.78; // Increased from 0.6 by 30%
-    targetRotationY = mouseX * 0.78; // Increased from 0.6 by 30%
-});
-
-camera.position.z = 25;
-
-function animate() {
-    requestAnimationFrame(animate);
-    
-    // Enhanced camera movement with stronger parallax
-    targetX = mouseX * 0.8; // Increased from 0.7
-    targetY = mouseY * 0.8; // Increased from 0.7
-    camera.position.x += (targetX - camera.position.x) * 0.035; // Slower damping
-    camera.position.y += (-targetY - camera.position.y) * 0.035;
-    
-    // Adjusted rotation damping for smoother movement with increased sensitivity
-    particleSystem.rotation.x += (targetRotationX - particleSystem.rotation.x) * 0.016; // Further reduced
-    particleSystem.rotation.y += (targetRotationY - particleSystem.rotation.y) * 0.016;
-    
-    camera.lookAt(scene.position);
-    
-    const positions = particles.attributes.position.array;
-    const colors = particles.attributes.color.array;
-    const linePositions = lineGeometry.attributes.position.array;
-    
-    for (let i = 0; i < positions.length; i += 3) {
-        const particleIndex = i / 3;
+    // Mouse movement effect
+    let mouseX = 0;
+    let mouseY = 0;
+    let mouseWorldPosition = new THREE.Vector3();
+    document.addEventListener('mousemove', (event) => {
+        mouseX = (event.clientX / window.innerWidth) * 2 - 1;
+        mouseY = -(event.clientY / window.innerHeight) * 2 + 1;
         
-        // Handle fading for the first 35 particles (increased from 25)
-        if (particleIndex < 35) {
-            fadeStates[particleIndex] += fadeSpeeds[particleIndex];
-            
-            // Reset particle when fully faded
-            if (fadeStates[particleIndex] <= 0) {
-                fadeStates[particleIndex] = 0;
-                fadeSpeeds[particleIndex] = Math.abs(fadeSpeeds[particleIndex]); // Start fading in
-                // Randomize position and size when reappearing
-                positions[i] = (Math.random() - 0.5) * 100;
-                positions[i + 1] = (Math.random() - 0.5) * 100;
-                positions[i + 2] = (Math.random() - 0.5) * 150;
-                sizes[particleIndex] = Math.random() * 0.3 + 0.1; // New random size
-            } else if (fadeStates[particleIndex] >= 1) {
-                fadeStates[particleIndex] = 1;
-                fadeSpeeds[particleIndex] = -Math.abs(fadeSpeeds[particleIndex]); // Start fading out
+        // Convert mouse position to world space
+        mouseWorldPosition.set(mouseX * 5, mouseY * 5, 0);
+    });
+
+    // Animation
+    function animate() {
+        requestAnimationFrame(animate);
+        
+        // Rotate particles
+        particlesMesh.rotation.x += 0.0005;
+        particlesMesh.rotation.y += 0.0005;
+        
+        // Mouse interaction
+        particlesMesh.rotation.x += mouseY * 0.0005;
+        particlesMesh.rotation.y += mouseX * 0.0005;
+        
+        // Update particle positions
+        const positions = particlesGeometry.attributes.position.array;
+        for (let i = 0; i < positions.length; i += 3) {
+            positions[i] += (Math.random() - 0.5) * 0.001;
+            positions[i + 1] += (Math.random() - 0.5) * 0.001;
+            positions[i + 2] += (Math.random() - 0.5) * 0.001;
+        }
+        particlesGeometry.attributes.position.needsUpdate = true;
+
+        // Update line connections
+        const linePositions = [];
+        const maxConnections = 30;
+        const connectionDistance = 0.8;
+        const mouseInfluenceRadius = 2.0;
+
+        // Find particles near mouse
+        const nearbyParticles = [];
+        for (let i = 0; i < positions.length; i += 3) {
+            const particlePos = new THREE.Vector3(
+                positions[i],
+                positions[i + 1],
+                positions[i + 2]
+            );
+            const distanceToMouse = particlePos.distanceTo(mouseWorldPosition);
+            if (distanceToMouse < mouseInfluenceRadius) {
+                nearbyParticles.push({
+                    position: particlePos,
+                    index: i
+                });
             }
+        }
+
+        // Create connections between nearby particles
+        for (let i = 0; i < nearbyParticles.length; i++) {
+            const particle1 = nearbyParticles[i];
+            let connections = 0;
             
-            opacities[particleIndex] = fadeStates[particleIndex];
-        }
-        
-        const x = positions[i];
-        const y = positions[i + 1];
-        const z = positions[i + 2];
-        
-        // Enhanced mouse interaction with stronger parallax
-        const dx = mouseX * 80 - x; // Increased range
-        const dy = -mouseY * 80 - y;
-        const dist = Math.sqrt(dx * dx + dy * dy);
-        
-        // Much stronger parallax effect based on Z position
-        const parallaxFactor = 1 + (z / 6); // Further reduced from 8 for much stronger effect
-        const force = (10 - dist) * 0.025 * mouseSpeed * parallaxFactor; // Further reduced force from 0.03 for even smoother movement
-        
-        if (dist < 10) { // Reduced interaction range
-            velocities[i] += dx * force;
-            velocities[i + 1] += dy * force;
-        }
-        
-        // Update positions with enhanced parallax, inertia, and gravity
-        const gravityStrength = 0.002 * masses[particleIndex]; // Gravity strength based on mass
-        const centerX = 0, centerY = 0, centerZ = 0; // Center of gravity
-        
-        // Calculate direction to center
-        const dxToCenter = centerX - positions[i];
-        const dyToCenter = centerY - positions[i + 1];
-        const dzToCenter = centerZ - positions[i + 2];
-        const distanceToCenter = Math.sqrt(dxToCenter * dxToCenter + dyToCenter * dyToCenter + dzToCenter * dzToCenter);
-        
-        // Apply gravity force
-        if (distanceToCenter > 0) {
-            const gravityForce = gravityStrength / (distanceToCenter * distanceToCenter); // Inverse square law
-            velocities[i] += dxToCenter * gravityForce;
-            velocities[i + 1] += dyToCenter * gravityForce;
-            velocities[i + 2] += dzToCenter * gravityForce;
-        }
-        
-        // Update positions with all forces
-        positions[i] += velocities[i] * parallaxFactor * inertias[particleIndex];
-        positions[i + 1] += velocities[i + 1] * parallaxFactor * inertias[particleIndex];
-        positions[i + 2] += velocities[i + 2] * parallaxFactor * inertias[particleIndex];
-        
-        // Enhanced boundary checks with increased Z range
-        if (Math.abs(positions[i]) > 45) { // Increased from 40
-            positions[i] = Math.sign(positions[i]) * 45;
-            velocities[i] *= -0.75; // Stronger bounce
-        }
-        if (Math.abs(positions[i + 1]) > 45) {
-            positions[i + 1] = Math.sign(positions[i + 1]) * 45;
-            velocities[i + 1] *= -0.75;
-        }
-        if (Math.abs(positions[i + 2]) > 60) { // Increased from 50
-            positions[i + 2] = Math.sign(positions[i + 2]) * 60;
-            velocities[i + 2] *= -0.75;
-        }
-        
-        // Enhanced color based on Z position, velocity, and rotation
-        const speed = Math.sqrt(
-            velocities[i] * velocities[i] + 
-            velocities[i + 1] * velocities[i + 1] + 
-            velocities[i + 2] * velocities[i + 2]
-        );
-        const zBrightness = 1 - (Math.abs(z) / 120); // Adjusted for new Z range
-        const rotationBrightness = 1 + Math.abs(particleSystem.rotation.y) * 1.2; // Increased rotation effect
-        const brightness = Math.min(speed * 30, 1) * zBrightness * rotationBrightness; // Increased speed effect
-        
-        colors[i] = 0.98 + brightness * 0.02;
-        colors[i + 1] = 0.01 + brightness * 0.02;
-        colors[i + 2] = 0.01 + brightness * 0.02;
-    }
-    
-    // Update line positions with reduced connection distance
-    const maxConnectionDistance = 5.61; // Increased by 10% from 5.1
-    for (let i = 0; i < positions.length; i += 3) {
-        // Only draw connections for visible particles
-        if (opacities[i / 3] > 0.1) {
-            linePositions[i] = positions[i];
-            linePositions[i + 1] = positions[i + 1];
-            linePositions[i + 2] = positions[i + 2];
-            
-            // Only connect particles that are closer together and visible
-            for (let j = i + 3; j < positions.length; j += 3) {
-                if (opacities[j / 3] > 0.1) {
-                    const dx = positions[i] - positions[j];
-                    const dy = positions[i + 1] - positions[j + 1];
-                    const dz = positions[i + 2] - positions[j + 2];
-                    const distance = Math.sqrt(dx * dx + dy * dy + dz * dz);
-                    
-                    if (distance < maxConnectionDistance) {
-                        linePositions[j] = positions[j];
-                        linePositions[j + 1] = positions[j + 1];
-                        linePositions[j + 2] = positions[j + 2];
-                    }
+            for (let j = i + 1; j < nearbyParticles.length && connections < maxConnections; j++) {
+                const particle2 = nearbyParticles[j];
+                const distance = particle1.position.distanceTo(particle2.position);
+                
+                if (distance < connectionDistance) {
+                    linePositions.push(
+                        particle1.position.x, particle1.position.y, particle1.position.z,
+                        particle2.position.x, particle2.position.y, particle2.position.z
+                    );
+                    connections++;
                 }
             }
         }
+
+        // Update line geometry
+        lineGeometry.setAttribute('position', new THREE.Float32BufferAttribute(linePositions, 3));
+        lineGeometry.attributes.position.needsUpdate = true;
+        
+        renderer.render(scene, camera);
     }
-    
-    particles.attributes.position.needsUpdate = true;
-    particles.attributes.color.needsUpdate = true;
-    lineGeometry.attributes.position.needsUpdate = true;
-    
-    renderer.render(scene, camera);
-}
 
-window.addEventListener('resize', () => {
-    camera.aspect = window.innerWidth / window.innerHeight;
-    camera.updateProjectionMatrix();
-    renderer.setSize(window.innerWidth, window.innerHeight);
+    // Handle window resize
+    window.addEventListener('resize', () => {
+        camera.aspect = window.innerWidth / window.innerHeight;
+        camera.updateProjectionMatrix();
+        renderer.setSize(window.innerWidth, window.innerHeight);
+    });
+
+    // Start animation
+    animate();
 });
-
-animate();
