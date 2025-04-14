@@ -1,5 +1,17 @@
 // Three.js Particle Animation
 document.addEventListener('DOMContentLoaded', function() {
+    // Initialize principle cards with animation delays
+    const principleCards = document.querySelectorAll('.principle-card');
+    principleCards.forEach((card, index) => {
+        card.style.setProperty('--card-index', index);
+    });
+
+    // Initialize project cards with animation delays
+    const projectCards = document.querySelectorAll('.project-card');
+    projectCards.forEach((card, index) => {
+        card.style.setProperty('--card-index', index);
+    });
+
     const scene = new THREE.Scene();
     const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
     const renderer = new THREE.WebGLRenderer({ 
@@ -7,12 +19,19 @@ document.addEventListener('DOMContentLoaded', function() {
         antialias: true 
     });
     
-    // Get the canvas container and its dimensions
+    // Get the canvas container
     const container = document.getElementById('canvas-container');
-    const containerRect = container.getBoundingClientRect();
     
-    // Set renderer size to container size instead of window
-    renderer.setSize(containerRect.width, containerRect.height);
+    // Function to update sizes
+    function updateSize() {
+        const containerRect = container.getBoundingClientRect();
+        camera.aspect = containerRect.width / containerRect.height;
+        camera.updateProjectionMatrix();
+        renderer.setSize(containerRect.width, containerRect.height, false);
+    }
+    
+    // Initial size setup
+    updateSize();
     renderer.setClearColor(0x000000, 0);
     container.appendChild(renderer.domElement);
 
@@ -20,6 +39,8 @@ document.addEventListener('DOMContentLoaded', function() {
     renderer.domElement.style.position = 'absolute';
     renderer.domElement.style.top = '0';
     renderer.domElement.style.left = '0';
+    renderer.domElement.style.width = '100%';
+    renderer.domElement.style.height = '100%';
     renderer.domElement.style.pointerEvents = 'none';
 
     // Create particles
@@ -164,11 +185,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     // Handle window resize
-    window.addEventListener('resize', () => {
-        camera.aspect = window.innerWidth / window.innerHeight;
-        camera.updateProjectionMatrix();
-        renderer.setSize(window.innerWidth, window.innerHeight);
-    });
+    window.addEventListener('resize', updateSize);
 
     // Start animation
     animate();
