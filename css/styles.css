@@ -11,6 +11,8 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
 }
 
 body {
@@ -29,9 +31,11 @@ body {
     padding: 1rem 2rem;
     background: var(--primary-color);
     backdrop-filter: blur(10px);
-    z-index: 100;
+    z-index: 1000;
     opacity: 1;
     visibility: visible;
+    transform: translateZ(0);
+    will-change: transform;
 }
 
 .nav {
@@ -258,6 +262,9 @@ body {
     overflow: visible;
     transform-style: preserve-3d;
     perspective: 1000px;
+    transform: translateZ(0);
+    will-change: transform;
+    backface-visibility: hidden;
 }
 
 .project-card::before {
@@ -302,6 +309,8 @@ body {
     box-shadow: 0 0 8px var(--secondary-color);
     transform-style: preserve-3d;
     transform: translateZ(0);
+    will-change: transform;
+    backface-visibility: hidden;
 }
 
 .particle-line {
@@ -318,6 +327,8 @@ body {
     transform-style: preserve-3d;
     transform: translateZ(-10px) scaleY(0);
     filter: drop-shadow(0 0 3px var(--secondary-color));
+    will-change: transform;
+    backface-visibility: hidden;
 }
 
 .particle-line.header-to-stats {
@@ -675,6 +686,9 @@ body {
     flex-direction: column;
     position: relative;
     overflow: hidden;
+    transform: translateZ(0);
+    will-change: transform;
+    backface-visibility: hidden;
 }
 
 .methodology-step::before {
@@ -763,6 +777,9 @@ body {
     border-radius: 8px;
     border: 1px solid rgba(255, 255, 255, 0.1);
     transition: all 0.3s ease;
+    transform: translateZ(0);
+    will-change: transform;
+    backface-visibility: hidden;
 }
 
 .principle-card:hover {
@@ -1082,4 +1099,32 @@ section > div {
     .section-card p {
         font-size: 0.9rem;
     }
+}
+
+/* Content visibility optimizations */
+.section {
+    content-visibility: auto;
+    contain-intrinsic-size: 1px 5000px;
+}
+
+/* Hardware acceleration for animations */
+.particle-line,
+.particle-source,
+.project-card {
+    transform: translateZ(0);
+    will-change: transform;
+    backface-visibility: hidden;
+}
+
+/* Reduce repaints for fixed elements */
+.fixed-element {
+    transform: translateZ(0);
+    backface-visibility: hidden;
+}
+
+/* Optimize images */
+img {
+    max-width: 100%;
+    height: auto;
+    display: block;
 } 
