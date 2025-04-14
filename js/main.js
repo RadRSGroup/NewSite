@@ -140,8 +140,75 @@ document.querySelectorAll('button, .btn').forEach(button => {
     button.classList.add('btn-micro');
 });
 
-// Initialize everything
+// Scroll Animation Observer
+const scrollObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+        if (entry.isIntersecting) {
+            if (entry.target.classList.contains('ai-title')) {
+                entry.target.classList.add('visible');
+                // Animate sections sequentially after title
+                const sections = document.querySelectorAll('.ai-section');
+                sections.forEach((section, index) => {
+                    setTimeout(() => {
+                        section.classList.add('visible');
+                    }, index * 500); // Increased delay for more dramatic effect
+                });
+            } else if (entry.target.classList.contains('ai-section')) {
+                // Only animate if the title is already visible
+                const title = document.querySelector('.ai-title');
+                if (title && title.classList.contains('visible')) {
+                    entry.target.classList.add('visible');
+                }
+            }
+        } else {
+            // Reset animations when scrolling back up
+            if (entry.target.classList.contains('ai-title')) {
+                entry.target.classList.remove('visible');
+                document.querySelectorAll('.ai-section').forEach(section => {
+                    section.classList.remove('visible');
+                });
+            }
+        }
+    });
+}, {
+    threshold: 0.2,
+    rootMargin: '0px 0px -100px 0px'
+});
+
+// Enhanced scroll handler
+let lastScrollY = window.scrollY;
+let ticking = false;
+
+function onScroll() {
+    lastScrollY = window.scrollY;
+    if (!ticking) {
+        window.requestAnimationFrame(() => {
+            const aiSections = document.querySelectorAll('.ai-section');
+            aiSections.forEach(section => {
+                const rect = section.getBoundingClientRect();
+                const isVisible = rect.top < window.innerHeight * 0.8;
+                if (isVisible) {
+                    section.classList.add('visible');
+                }
+            });
+            ticking = false;
+        });
+        ticking = true;
+    }
+}
+
+// Observe elements
 document.addEventListener('DOMContentLoaded', () => {
+    const aiTitle = document.querySelector('.ai-title');
+    const aiSections = document.querySelectorAll('.ai-section');
+    
+    if (aiTitle) scrollObserver.observe(aiTitle);
+    aiSections.forEach(section => scrollObserver.observe(section));
+    
+    // Add scroll event listener
+    window.addEventListener('scroll', onScroll);
+    
+    // Initialize other functionality
     initLoading();
     initScrollProgress();
     handleScroll();
@@ -150,7 +217,6 @@ document.addEventListener('DOMContentLoaded', () => {
     document.querySelector('main').classList.add('page-transition', 'active');
     
     // Event Listeners
-    window.addEventListener('scroll', handleScroll);
     mobileMenuToggle.addEventListener('click', toggleMobileMenu);
     form.addEventListener('submit', handleFormSubmit);
 }); 
