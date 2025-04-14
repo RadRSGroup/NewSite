@@ -236,56 +236,105 @@ body {
 .about {
     padding: var(--spacing-xl) var(--spacing-lg);
     background: var(--dark-bg);
+    position: relative;
 }
 
 .about-content {
     max-width: 1400px;
     margin: 0 auto;
-}
-
-.about h2 {
-    font-size: 3rem;
-    margin-bottom: var(--spacing-xl);
-    color: var(--accent-color);
-}
-
-.about-grid {
-    display: grid;
-    grid-template-columns: 3fr 2fr;
-    gap: var(--spacing-xl);
+    position: relative;
 }
 
 .about-text {
-    color: var(--text-color);
+    position: relative;
+    z-index: 2;
+    max-width: 800px;
+    margin: 0 auto var(--spacing-xl);
+}
+
+.doers-text {
+    font-size: 4.5rem;
+    font-weight: 800;
+    color: var(--secondary-color);
+    margin-bottom: var(--spacing-xl);
+    line-height: 1;
+    text-transform: uppercase;
+    letter-spacing: -0.02em;
+    position: relative;
+    z-index: 2;
+    text-align: center;
 }
 
 .about-text .lead {
-    font-size: 1.5rem;
-    margin-bottom: var(--spacing-lg);
-    color: var(--secondary-color);
+    font-size: 1.25rem;
+    font-weight: 500;
+    margin-bottom: var(--spacing-md);
+    color: var(--text-color);
 }
 
 .about-text p {
     margin-bottom: var(--spacing-md);
+    color: var(--text-color);
 }
 
-.salute {
+.about-text p.salute {
+    font-weight: 600;
+    color: #e31837 !important;
+    font-style: italic;
+    text-shadow: 0 0 10px rgba(227, 24, 55, 0.3);
+    font-size: 1.5rem;
+    margin-top: var(--spacing-md);
+}
+
+.mission-container {
+    background: linear-gradient(135deg, rgba(10, 15, 76, 0.8), rgba(227, 24, 55, 0.8));
+    border-radius: var(--border-radius-lg);
+    padding: var(--spacing-xl);
+    margin: var(--spacing-xl) auto;
+    max-width: 800px;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+    transform: translateY(0);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.mission-container:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 25px 50px rgba(0, 0, 0, 0.5);
+}
+
+.mission-container::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: url('../images/pattern.svg') center/cover;
+    opacity: 0.1;
+    z-index: 1;
+}
+
+.mission-content {
+    position: relative;
+    z-index: 2;
+    text-align: center;
+}
+
+.mission-content h3 {
     font-size: 2rem;
-    color: var(--secondary-color);
-    margin-top: var(--spacing-lg);
+    color: var(--accent-color);
+    margin-bottom: var(--spacing-md);
     font-weight: 700;
 }
 
-.highlight-item {
-    background: var(--light-bg);
-    padding: var(--spacing-lg);
-    border-radius: var(--border-radius-lg);
-    box-shadow: var(--shadow-md);
-}
-
-.highlight-item h3 {
-    color: var(--secondary-color);
-    margin-bottom: var(--spacing-md);
+.mission-content p {
+    font-size: 1.25rem;
+    line-height: 1.6;
+    color: var(--text-color);
+    font-style: italic;
 }
 
 /* Services Section */
@@ -325,18 +374,24 @@ body {
 .project-card {
     flex: 0 0 calc(100% - 2rem);
     max-width: 500px;
-    background: rgba(255, 255, 255, 0.03);
-    border-radius: 20px;
+    background: linear-gradient(135deg, rgba(10, 15, 76, 0.8), rgba(227, 24, 55, 0.2));
+    border-radius: var(--border-radius-lg);
     padding: 2rem;
     transition: transform 0.3s ease, box-shadow 0.3s ease;
     position: relative;
     overflow: hidden;
     backdrop-filter: blur(10px);
-    border: 1px solid rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
     scroll-snap-align: center;
     display: flex;
     flex-direction: column;
     gap: 1.5rem;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+}
+
+.project-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 25px 50px rgba(0, 0, 0, 0.5);
 }
 
 .project-card::before {
@@ -366,14 +421,14 @@ body {
     width: 2.5rem;
     height: 2.5rem;
     flex-shrink: 0;
-    fill: var(--primary-color);
+    fill: var(--secondary-color);
     margin-top: 0.25rem;
 }
 
 .project-card h3 {
     font-size: 1.5rem;
     line-height: 1.3;
-    color: var(--text-color);
+    color: var(--accent-color);
     margin: 0;
     flex-grow: 1;
 }
@@ -400,14 +455,20 @@ body {
     align-items: center;
     padding: 1rem 1.5rem;
     background: rgba(255, 255, 255, 0.02);
-    border-radius: 12px;
+    border-radius: var(--border-radius-md);
     border: 1px solid rgba(255, 255, 255, 0.03);
+    transition: transform 0.3s ease;
+}
+
+.stat:hover {
+    transform: translateX(5px);
+    background: rgba(255, 255, 255, 0.05);
 }
 
 .stat-count {
     font-size: 1.75rem;
     font-weight: 700;
-    color: var(--primary-color);
+    color: var(--secondary-color);
     line-height: 1;
 }
 
@@ -706,6 +767,32 @@ body {
     .stat-label {
         font-size: 0.875rem;
         text-align: right;
+    }
+
+    .about-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .doers-text {
+        font-size: 3rem;
+    }
+    
+    .mission-container {
+        margin: var(--spacing-lg) var(--spacing-md);
+        padding: var(--spacing-lg);
+    }
+    
+    .mission-content h3 {
+        font-size: 1.75rem;
+    }
+    
+    .mission-content p {
+        font-size: 1.1rem;
+    }
+    
+    .salute {
+        font-size: 2rem;
+        padding: var(--spacing-md);
     }
 }
 
