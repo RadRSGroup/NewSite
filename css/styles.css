@@ -1,13 +1,13 @@
 :root {
     /* Colors */
-    --primary-color: #0a0f4c;
-    --secondary-color: #e31837;
+    --primary-color: #1a1f6c;
+    --secondary-color: #ff2d4d;
     --accent-color: #ffffff;
     --text-color: #f0f2ff;
-    --dark-bg: #050826;
-    --light-bg: #0d1445;
-    --gradient-start: #0a0f4c;   /* Blue for top left */
-    --gradient-end: #e31837;     /* Red for bottom right */
+    --dark-bg: #0a0d36;
+    --light-bg: #151b65;
+    --gradient-start: #1a1f6c;   /* Brighter blue for top left */
+    --gradient-end: #ff2d4d;     /* Brighter red for bottom right */
     
     /* Typography */
     --font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
@@ -52,7 +52,7 @@ body {
     font-family: var(--font-family);
     line-height: var(--line-height-base);
     color: var(--text-color);
-    background: var(--dark-bg);
+    background: linear-gradient(135deg, var(--dark-bg), var(--light-bg));
     overflow-x: hidden;
 }
 

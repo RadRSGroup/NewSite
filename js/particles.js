@@ -67,15 +67,15 @@ function initParticles() {
         positions[i * 3 + 1] = (Math.random() - 0.5) * 10;
         positions[i * 3 + 2] = (Math.random() - 0.5) * 10;
 
-        // Enhanced color scheme with subtle variations
-        const baseBlue = 0.4; // Increased base blue value
-        const variation = Math.random() * 0.15; // Increased variation
-        colors[i * 3] = 0.15 + variation;     // R
-        colors[i * 3 + 1] = 0.15 + variation; // G
+        // Lighter color scheme with subtle variations
+        const baseBlue = 0.6; // Increased base blue value for lighter appearance
+        const variation = Math.random() * 0.1; // Reduced variation
+        colors[i * 3] = 0.3 + variation;     // R
+        colors[i * 3 + 1] = 0.3 + variation; // G
         colors[i * 3 + 2] = baseBlue + variation; // B
 
         // Slightly varied sizes for depth
-        sizes[i] = 0.15 + Math.random() * 0.05;
+        sizes[i] = 0.1 + Math.random() * 0.05; // Reduced size
     }
 
     geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
@@ -85,13 +85,13 @@ function initParticles() {
     // Create round particle texture
     const particleTexture = new THREE.CanvasTexture(createRoundParticleTexture());
 
-    // Particle material with enhanced settings
+    // Particle material with reduced opacity
     const material = new THREE.PointsMaterial({
-        size: 0.15,
+        size: 0.1, // Reduced size
         map: particleTexture,
         vertexColors: true,
         transparent: true,
-        opacity: 0.95, // Increased opacity
+        opacity: 0.7, // Reduced opacity
         blending: THREE.AdditiveBlending,
         depthWrite: false,
         sizeAttenuation: true
