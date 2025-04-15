@@ -1154,10 +1154,16 @@ html {
 
 /* Methodology Section */
 .methodology {
-    padding: var(--spacing-xl) 0;
+    padding: var(--spacing-xl) var(--spacing-xl);
     background: linear-gradient(135deg, rgba(10, 15, 76, 0.9), rgba(5, 8, 38, 0.9));
     position: relative;
     overflow: hidden;
+}
+
+.methodology .container {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 var(--spacing-lg);
 }
 
 .methodology::before {
@@ -1224,8 +1230,14 @@ html {
 
 /* Results Section */
 .results {
-    padding: var(--spacing-xl) 0;
+    padding: var(--spacing-xl) var(--spacing-xl);
     background: var(--dark-bg);
+}
+
+.results .container {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 var(--spacing-lg);
 }
 
 .results-grid {
