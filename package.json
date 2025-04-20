@@ -1,0 +1,18 @@
+{
+  "name": "rs-group-website",
+  "version": "1.0.0",
+  "description": "RS Group Website",
+  "main": "index.js",
+  "scripts": {
+    "start": "http-server -p 3000",
+    "dev": "nodemon --watch src --ext js,html,css --exec 'http-server -p 3000'",
+    "build": "echo 'No build step required for static site'",
+    "test": "echo 'No tests configured'"
+  },
+  "dependencies": {
+    "http-server": "^14.1.1"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.2"
+  }
+} 

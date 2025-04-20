@@ -266,15 +266,18 @@ body {
 }
 
 .about-text .lead {
-    font-size: 1.25rem;
+    font-size: 1.75rem;
     font-weight: 500;
     margin-bottom: var(--spacing-md);
     color: var(--text-color);
+    line-height: 1.4;
 }
 
 .about-text p {
+    font-size: 1.5rem;
     margin-bottom: var(--spacing-md);
     color: var(--text-color);
+    line-height: 1.4;
 }
 
 .about-text p.salute {

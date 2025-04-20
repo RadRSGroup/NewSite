@@ -1,0 +1,84 @@
+version: '3.8'
+
+services:
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8080:80"
+    networks:
+      - app-network
+
+  # Development service with hot reloading
+  dev:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    volumes:
+      - .:/app
+      - /app/node_modules
+    ports:
+      - "3001:3000"
+    environment:
+      - NODE_ENV=development
+    networks:
+      - app-network
+
+  vpn:
+    image: qmcgaw/gluetun
+    container_name: vpn
+    cap_add:
+      - NET_ADMIN
+    environment:
+      - VPN_SERVICE_PROVIDER=nordvpn
+      - VPN_TYPE=openvpn
+      - OPENVPN_USER=${VPN_TOKEN}
+      - OPENVPN_PASSWORD=${VPN_TOKEN}
+      - SERVER_REGIONS=us_tampa
+    volumes:
+      - ./vpn:/gluetun:ro
+    ports:
+      - "8888:8888/tcp"  # HTTP proxy
+      - "8388:8388/tcp"  # Shadowsocks
+      - "8388:8388/udp"  # Shadowsocks
+    restart: unless-stopped
+    dns:
+      - 1.1.1.1
+      - 1.0.0.1
+    networks:
+      - vpn_network
+
+  # Add more services as needed, for example:
+  # api:
+  #   build:
+  #     context: ./api
+  #     dockerfile: Dockerfile
+  #   ports:
+  #     - "3000:3000"
+  #   environment:
+  #     - NODE_ENV=development
+  #   networks:
+  #     - app-network
+
+  # database:
+  #   image: postgres:13
+  #   ports:
+  #     - "5432:5432"
+  #   environment:
+  #     - POSTGRES_USER=user
+  #     - POSTGRES_PASSWORD=password
+  #     - POSTGRES_DB=appdb
+  #   volumes:
+  #     - postgres_data:/var/lib/postgresql/data
+  #   networks:
+  #     - app-network
+
+networks:
+  app-network:
+    driver: bridge
+  vpn_network:
+    external: true
+
+# volumes:
+#   postgres_data: 
