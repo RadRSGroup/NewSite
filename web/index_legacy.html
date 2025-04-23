@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="RS Group - Innovative Solutions for Modern Business">
+    <title>RS Group - Innovative Solutions</title>
+    
+    <!-- Preload critical assets -->
+    <link rel="preload" href="css/styles.css" as="style">
+    
+    <!-- Styles -->
+    <link rel="stylesheet" href="css/styles.css">
+    
+    <!-- Scripts -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="js/particles.js" defer></script>
+    <script src="js/main.js" defer></script>
+</head>
+<body>
+    <!-- Skip to main content link for accessibility -->
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <a href="#" class="logo">
+                <img src="images/logo.svg" alt="RS Group Logo">
+            </a>
+            <nav class="nav">
+                <button class="mobile-menu-toggle" aria-label="Toggle menu" aria-expanded="false">
+                    <span class="menu-icon"></span>
+                </button>
+                <ul class="nav-links">
+                    <li><a href="#home" class="nav-link">Home</a></li>
+                    <li><a href="#about" class="nav-link">About</a></li>
+                    <li><a href="#services" class="nav-link">Services</a></li>
+                    <li><a href="#contact" class="nav-link">Contact</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main id="main-content" role="main">
+        <!-- Hero Section -->
+        <section id="home" class="hero">
+            <div class="hero-content">
+                <h1>RS Group</h1>
+                <p>Transforming Institutional Knowledge into Innovative Solutions</p>
+            </div>
+            <div id="canvas-container" aria-hidden="true"></div>
+        </section>
+
+        <!-- About Section -->
+        <section id="about" class="about">
+            <div class="about-content">
+                <div class="about-text">
+                    <h2 class="doers-text">We are Doers.</h2>
+                    <p class="lead">We believe in the power of Dreams.</p>
+                    <p class="lead">We've turned ideas into thriving businesses, transforming visions into reality. We've felt the joy of success and the sting of failure.</p>
+                    <p>We know you; Leaders with vision that make it happen and drive success. You are where the buck stops.</p>
+                    <p>We share your passion for business and the opportunity it creates to make the world a better place. We make our dent in the world helping your company succeed.</p>
+                    <p class="salute">We salute you.</p>
+                </div>
+                <div class="mission-container">
+                    <div class="mission-content">
+                        <h3>Our Mission</h3>
+                        <p>"Resourced Services Group is committed to excellence. We can, and we will, change ideas about what is possible. We choose to serve as leaders who face challenges head-on, unafraid. We do this because we believe confidently in our ability to create the future."</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- AI Solutions Section -->
+        <section class="ai-solutions">
+            <div class="container">
+                <div class="ai-content">
+                    <h2 class="ai-title">Beyond Off-the-Shelf</h2>
+                    <div class="ai-stack">
+                        <div class="ai-section" data-scroll>
+                            <div class="ai-section-content glass-card">
+                                <h3>The Challenge</h3>
+                                <p>AI is proving to be a major disruptor in every part of the modern business landscape. While adopting this technology is not an option, what is the best way to apply it to your business? Market AI software often promises quick solutions, but in practice, it frequently falls short for businesses with unique challenges. These generic tools are designed for broad use, which means they may not align well with specific workflows or industry nuances. As a result, companies may find themselves adapting their processes to fit the software, rather than the software enhancing their operations.</p>
+                            </div>
+                        </div>
+                        
+                        <div class="ai-section" data-scroll>
+                            <div class="ai-section-content glass-card">
+                                <h3>Our Solution</h3>
+                                <p>In contrast, hyper-targeted AI solutions are tailored to a company's specific needs and can adapt as those needs evolve. Instead of becoming obsolete with technological advancements, these customized tools can incorporate new developments, ensuring they remain relevant and effective. This adaptability allows businesses to stay ahead, using AI that grows and changes alongside them.</p>
+                            </div>
+                        </div>
+                        
+                        <div class="ai-section" data-scroll>
+                            <div class="ai-section-content glass-card">
+                                <h3>Our Approach</h3>
+                                <p>At RS Group, we specialize in creating AI solutions that fit seamlessly into your existing processes. Our approach focuses on enhancing your team's capabilities, not replacing them, ensuring that technology serves as a valuable assistant rather than a disruptive force. By aligning AI tools with your specific goals and workflows, we help you achieve greater efficiency and sustained growth. We believe that the future of AI is its integration with <i>human intelligence.</i> </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Services Section -->
+        <section id="services" class="services">
+            <h2>Professional Services</h2>
+            <div class="project-grid">
+                <article class="project-card">
+                    <div class="project-header">
+                        <svg class="project-icon" viewBox="0 0 24 24" width="24" height="24">
+                            <path d="M3 3h18v18H3V3zm16 16V5H5v14h14zM7 7h10v2H7V7zm0 4h10v2H7v-2zm0 4h7v2H7v-2z"/>
+                        </svg>
+                        <h3>Smart Process Analysis</h3>
+                    </div>
+                    <p>We help you find the sweet spots in your workflow where technology can make the biggest impact. No jargon, just practical solutions that boost efficiency and save money.</p>
+                </article>
+
+                <article class="project-card">
+                    <div class="project-header">
+                        <svg class="project-icon" viewBox="0 0 16 16" width="16" height="16">
+                            <path d="M8 0a8 8 0 100 16A8 8 0 008 0zM4.5 7.5a.5.5 0 01.5-.5h2V5H5a1 1 0 00-1 1v4a1 1 0 001 1h2v-2H5a.5.5 0 01-.5-.5v-1zm3.5-.5h2a.5.5 0 01.5.5v1a.5.5 0 01-.5.5H8v2h2a1 1 0 001-1V6a1 1 0 00-1-1H8v2z"></path>
+                        </svg>
+                        <h3>People-First AI</h3>
+                    </div>
+                    <p>We bring AI into your workplace in a way that actually makes sense. Your team's knowledge is gold - we help AI enhance it, not replace it. Think of it as giving your experts a really smart assistant.</p>
+                </article>
+
+                <article class="project-card">
+                    <div class="project-header">
+                        <svg class="project-icon" viewBox="0 0 16 16" width="16" height="16">
+                            <path d="M7.467.133a1.75 1.75 0 011.066 0l5.25 1.68A1.75 1.75 0 0115 3.48V7c0 1.566-.32 3.182-1.303 4.682-.983 1.498-2.585 2.813-5.032 3.855a1.7 1.7 0 01-1.33 0c-2.447-1.042-4.049-2.357-5.032-3.855C1.32 10.182 1 8.566 1 7V3.48a1.75 1.75 0 011.217-1.667l5.25-1.68zm.61 1.429a.25.25 0 00-.153 0l-5.25 1.68a.25.25 0 00-.174.238V7c0 1.358.275 2.666 1.057 3.86.784 1.194 2.121 2.34 4.366 3.297a.2.2 0 00.154 0c2.245-.956 3.582-2.104 4.366-3.298C13.225 9.666 13.5 8.36 13.5 7V3.48a.25.25 0 00-.174-.237l-5.25-1.68zM8 5.25a.75.75 0 01.75.75v2.5a.75.75 0 01-1.5 0V6A.75.75 0 018 5.25zm0 6a1 1 0 100-2 1 1 0 000 2z"></path>
+                        </svg>
+                        <h3>Revenue-Driven Design</h3>
+                    </div>
+                    <p>We build processes that put money in your pocket. Simple as that. By focusing on what brings in revenue and keeps customers happy, we help your business grow naturally and sustainably.</p>
+                </article>
+
+                <article class="project-card">
+                    <div class="project-header">
+                        <svg class="project-icon" viewBox="0 0 24 24" width="24" height="24">
+                            <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
+                        </svg>
+                        <h3>Flexible Tech Solutions</h3>
+                    </div>
+                    <p>Whether you're just starting out or running a large operation, we've got you covered. Our solutions grow with you, fitting your budget today while being ready for tomorrow's challenges.</p>
+                </article>
+            </div>
+        </section>
+
+        <section class="methodology parallax">
+            <div class="container">
+                <h2>Our Methodology</h2>
+                <div class="methodology-content">
+                    <div class="methodology-card glass-card">
+                        <div class="methodology-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
+                            </svg>
+                        </div>
+                        <h3>LEAN Process Engineering</h3>
+                        <p>We implement LEAN principles to optimize your business processes, eliminate waste, and maximize value delivery. Our approach focuses on continuous improvement and operational excellence.</p>
+                        <ul class="methodology-list">
+                            <li>Process Mapping & Analysis</li>
+                            <li>Waste Elimination (Muda)</li>
+                            <li>Standard Work Procedures</li>
+                            <li>Continuous Flow Optimization</li>
+                            <li>Pull System Implementation</li>
+                            <li>Visual Management Systems</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="methodology-card glass-card">
+                        <div class="methodology-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
+                            </svg>
+                        </div>
+                        <h3>Agile Implementation</h3>
+                        <p>Our Agile methodology ensures rapid delivery of process improvements while maintaining flexibility and adaptability. We focus on delivering value incrementally and responding to change effectively.</p>
+                        <ul class="methodology-list">
+                            <li>Iterative Process Improvement</li>
+                            <li>Cross-functional Team Collaboration</li>
+                            <li>Rapid Prototyping & Testing</li>
+                            <li>Continuous Feedback Loops</li>
+                            <li>Adaptive Planning & Execution</li>
+                            <li>Performance Metrics & KPIs</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="results">
+            <div class="container">
+                <h2>Proven Results</h2>
+                <div class="results-grid">
+                    <div class="result-card card-3d">
+                        <div class="result-number">98%</div>
+                        <h3>Client Satisfaction</h3>
+                        <p>Consistent delivery of high-quality solutions that exceed expectations</p>
+                    </div>
+                    <div class="result-card card-3d">
+                        <div class="result-number">45%</div>
+                        <h3>Faster Delivery</h3>
+                        <p>Reduced time-to-market through efficient processes</p>
+                    </div>
+                    <div class="result-card card-3d">
+                        <div class="result-number">30%</div>
+                        <h3>Cost Reduction</h3>
+                        <p>Optimized resource utilization and waste elimination</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Contact Section -->
+        <section id="contact" class="contact">
+            <div class="container">
+                <div class="contact-header">
+                    <h2>Let's Build Something Amazing Together</h2>
+                    <p class="contact-subtitle">Transform your business with custom AI solutions that work for you</p>
+                </div>
+                
+                <div class="contact-grid">
+                    <div class="contact-info">
+                        <div class="info-card glass-card">
+                            <h3>Why Choose RS Group?</h3>
+                            <ul class="benefits-list">
+                                <li>
+                                    <svg class="benefit-icon" viewBox="0 0 24 24" width="24" height="24">
+                                        <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z"/>
+                                    </svg>
+                                    <span>Custom AI Solutions</span>
+                                </li>
+                                <li>
+                                    <svg class="benefit-icon" viewBox="0 0 24 24" width="24" height="24">
+                                        <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z"/>
+                                    </svg>
+                                    <span>Industry-Specific Expertise</span>
+                                </li>
+                                <li>
+                                    <svg class="benefit-icon" viewBox="0 0 24 24" width="24" height="24">
+                                        <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z"/>
+                                    </svg>
+                                    <span>Seamless Integration</span>
+                                </li>
+                                <li>
+                                    <svg class="benefit-icon" viewBox="0 0 24 24" width="24" height="24">
+                                        <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z"/>
+                                    </svg>
+                                    <span>Ongoing Support</span>
+                                </li>
+                            </ul>
+                        </div>
+                        
+                        <div class="cta-card glass-card">
+                            <h3>Ready to Get Started?</h3>
+                            <p>Schedule a free consultation to discuss your project</p>
+                            <a href="#contact-form" class="cta-button">Schedule Now</a>
+                        </div>
+                    </div>
+                    
+                    <form class="contact-form" id="contact-form">
+                        <div class="form-group">
+                            <label for="name">Name</label>
+                            <input type="text" id="name" name="name" required placeholder="Your name">
+                        </div>
+                        <div class="form-group">
+                            <label for="email">Email</label>
+                            <input type="email" id="email" name="email" required placeholder="Your email">
+                        </div>
+                        <div class="form-group">
+                            <label for="company">Company</label>
+                            <input type="text" id="company" name="company" placeholder="Your company">
+                        </div>
+                        <div class="form-group">
+                            <label for="message">Message</label>
+                            <textarea id="message" name="message" required placeholder="Tell us about your project"></textarea>
+                        </div>
+                        <button type="submit" class="submit-btn">
+                            <span>Send Message</span>
+                            <svg class="send-icon" viewBox="0 0 24 24" width="24" height="24">
+                                <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/>
+                            </svg>
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer" role="contentinfo">
+        <p>&copy; 2025 RS Group. All rights reserved.</p>
+    </footer>
+</body>
+</html> 
