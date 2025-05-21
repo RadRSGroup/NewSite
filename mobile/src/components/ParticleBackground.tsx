@@ -19,7 +19,7 @@ const ParticleSystem: React.FC<ParticleSystemProps> = ({
   spread = 10,
   opacity = 1.0,
 }) => {
-  const particlesRef = useRef<THREE.Points>();
+  const particlesRef = useRef<THREE.Points>(null);
   const { viewport } = useThree();
 
   // Create particles
@@ -59,13 +59,13 @@ const ParticleSystem: React.FC<ParticleSystemProps> = ({
     <points ref={particlesRef}>
       <bufferGeometry>
         <bufferAttribute
-          attachObject={['attributes', 'position']}
+          attach="attributes-position"
           count={count}
           array={positions}
           itemSize={3}
         />
         <bufferAttribute
-          attachObject={['attributes', 'color']}
+          attach="attributes-color"
           count={count}
           array={colors}
           itemSize={3}
@@ -89,7 +89,7 @@ interface ParticleBackgroundProps extends ParticleSystemProps {
 
 const ParticleBackground: React.FC<ParticleBackgroundProps> = ({ style, ...props }) => {
   return (
-    <Canvas style={[{ flex: 1 }, style]}>
+    <Canvas style={{ flex: 1, ...(style || {}) }}>
       <ambientLight intensity={0.5} />
       <ParticleSystem {...props} />
     </Canvas>

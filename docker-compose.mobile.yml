@@ -1,0 +1,17 @@
+version: '3.8'
+
+services:
+  mobile-dev:
+    build:
+      context: .
+      dockerfile: Dockerfile.mobile
+    ports:
+      - "8081:8081"  # React Native development server
+      - "9090:9090"  # React Native debugger
+    volumes:
+      - .:/app
+      - /app/node_modules
+    environment:
+      - NODE_ENV=development
+      - REACT_NATIVE_PACKAGER_HOSTNAME=localhost
+    command: npm start 

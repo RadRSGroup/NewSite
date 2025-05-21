@@ -1,0 +1,48 @@
+# Use Node.js as the base image
+FROM node:20-alpine
+
+# Set working directory
+WORKDIR /app
+
+# Install system dependencies
+RUN apk add --no-cache \
+    bash \
+    git \
+    curl \
+    python3 \
+    make \
+    g++ \
+    openjdk11-jre \
+    unzip
+
+# Set up Android SDK
+ENV ANDROID_HOME=/opt/android-sdk
+RUN mkdir -p ${ANDROID_HOME}/cmdline-tools && \
+    cd ${ANDROID_HOME}/cmdline-tools && \
+    curl -o sdk-tools.zip https://dl.google.com/android/repository/commandlinetools-linux-9477386_latest.zip && \
+    unzip sdk-tools.zip && \
+    rm sdk-tools.zip && \
+    mv cmdline-tools latest && \
+    yes | ${ANDROID_HOME}/cmdline-tools/latest/bin/sdkmanager --licenses && \
+    ${ANDROID_HOME}/cmdline-tools/latest/bin/sdkmanager "platform-tools" "platforms;android-33" "build-tools;33.0.0"
+
+# Add Android tools to PATH
+ENV PATH=${PATH}:${ANDROID_HOME}/platform-tools:${ANDROID_HOME}/cmdline-tools/latest/bin
+
+# Install React Native CLI globally
+RUN npm install -g react-native-cli
+
+# Copy package files
+COPY package*.json ./
+
+# Install dependencies
+RUN npm install
+
+# Copy the rest of the application
+COPY . .
+
+# Expose development port
+EXPOSE 8081
+
+# Start React Native development server
+CMD ["npm", "start"] 

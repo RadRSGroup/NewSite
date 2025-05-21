@@ -4,15 +4,20 @@
   "description": "RS Group Website",
   "main": "index.js",
   "scripts": {
-    "start": "http-server -p 3000",
-    "dev": "nodemon --watch src --ext js,html,css --exec 'http-server -p 3000'",
-    "build": "echo 'No build step required for static site'",
+    "start": "http-server -p 8081",
+    "dev": "nodemon --watch src --ext js,html,css --exec 'http-server -p 8081'",
+    "build": "npx tailwindcss -i ./src/input.css -o ./dist/output.css",
     "test": "echo 'No tests configured'"
   },
   "dependencies": {
+    "@react-native-community/blur": "^4.4.1",
     "http-server": "^14.1.1"
   },
   "devDependencies": {
-    "nodemon": "^3.0.2"
+    "@tailwindcss/forms": "^0.5.7",
+    "autoprefixer": "^10.4.21",
+    "nodemon": "^3.0.2",
+    "postcss": "^8.5.3",
+    "tailwindcss": "^4.1.7"
   }
-} 
+}

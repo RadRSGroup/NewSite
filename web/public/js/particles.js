@@ -1,6 +1,6 @@
 // Three.js Particle System
 let scene, camera, renderer, particles;
-const particleCount = 2000;
+const particleCount = 100;
 
 function createRoundParticleTexture() {
     const canvas = document.createElement('canvas');
@@ -44,7 +44,10 @@ function initParticles() {
     renderer = new THREE.WebGLRenderer({ 
         alpha: true,
         antialias: true,
-        powerPreference: 'high-performance'
+        powerPreference: 'high-performance',
+        precision: 'highp',
+        stencil: false,
+        depth: true
     });
     
     // Set canvas size and position
@@ -67,15 +70,15 @@ function initParticles() {
         positions[i * 3 + 1] = (Math.random() - 0.5) * 10;
         positions[i * 3 + 2] = (Math.random() - 0.5) * 10;
 
-        // Lighter color scheme with subtle variations
-        const baseBlue = 0.6; // Increased base blue value for lighter appearance
-        const variation = Math.random() * 0.1; // Reduced variation
-        colors[i * 3] = 0.3 + variation;     // R
-        colors[i * 3 + 1] = 0.3 + variation; // G
-        colors[i * 3 + 2] = baseBlue + variation; // B
-
         // Slightly varied sizes for depth
-        sizes[i] = 0.1 + Math.random() * 0.05; // Reduced size
+        sizes[i] = 0.05 + Math.random() * 0.02; // Smaller size for performance
+
+        // Lighter color scheme with subtle variations
+        const baseBlue = 0.8; // Increased base blue value for better visibility
+        const variation = Math.random() * 0.2; // Increased variation
+        colors[i * 3] = 0.4 + variation;     // R
+        colors[i * 3 + 1] = 0.4 + variation; // G
+        colors[i * 3 + 2] = baseBlue + variation; // B
     }
 
     geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
@@ -87,7 +90,7 @@ function initParticles() {
 
     // Particle material with reduced opacity
     const material = new THREE.PointsMaterial({
-        size: 0.1, // Reduced size
+        size: 0.05, // Smaller size for performance
         map: particleTexture,
         vertexColors: true,
         transparent: true,
@@ -122,4 +125,12 @@ document.addEventListener('DOMContentLoaded', () => {
         initParticles();
         animateParticles();
     }
-}); 
+});
+
+// After createRoundParticleTexture definition, add debug canvas
+const debugCanvas = createRoundParticleTexture();
+debugCanvas.style.position = "absolute";
+debugCanvas.style.top = "10px";
+debugCanvas.style.left = "10px";
+debugCanvas.style.zIndex = 9999;
+document.body.appendChild(debugCanvas); 
