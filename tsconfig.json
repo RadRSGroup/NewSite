@@ -1,0 +1,11 @@
+{
+  "extends": "./NewSite/web/tsconfig.json",
+  "compilerOptions": {
+    "esModuleInterop": true,
+    "jsx": "react-jsx"
+  },
+  "include": [
+    "NewSite/web/src/app/components/**/*.ts",
+    "NewSite/web/src/app/components/**/*.tsx"
+  ]
+} 
