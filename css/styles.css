@@ -1449,3 +1449,32 @@ html {
         padding: 0 var(--spacing-md);
     }
 } 
+/* Windows-specific rendering optimizations */
+canvas {
+    image-rendering: auto !important;
+    image-rendering: -webkit-optimize-contrast !important;
+    image-rendering: crisp-edges;
+    /* Force hardware acceleration on Windows */
+    transform: translateZ(0);
+    will-change: transform;
+}
+
+#canvas-container canvas {
+    /* Additional Windows optimizations */
+    backface-visibility: hidden;
+    perspective: 1000px;
+}
+
+/* Windows Chrome/Edge specific fixes */
+@media screen and (-ms-high-contrast: active), (-ms-high-contrast: none) {
+    canvas {
+        image-rendering: -ms-interpolation-mode: nearest-neighbor;
+    }
+}
+
+/* Windows Firefox specific fixes */
+@-moz-document url-prefix() {
+    canvas {
+        image-rendering: -moz-crisp-edges;
+    }
+}

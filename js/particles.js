@@ -1,6 +1,9 @@
+
 // Three.js Particle System
 let scene, camera, renderer, particles;
-const particleCount = 2000;
+const isWindows = navigator.userAgent.includes('Windows');
+const particleCount = isWindows ? 1500 : 2000;
+
 
 function createRoundParticleTexture() {
     const canvas = document.createElement('canvas');
@@ -43,10 +46,12 @@ function initParticles() {
     camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
     renderer = new THREE.WebGLRenderer({ 
         alpha: true,
-        antialias: true,
-        powerPreference: 'high-performance'
+        antialias: !isWindows || window.devicePixelRatio > 2,
+        powerPreference: isWindows ?  'default' :'high-performance',
+        precision: 'mediump'
     });
-    
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.5));
+
     // Set canvas size and position
     const canvasContainer = document.getElementById('canvas-container');
     renderer.setSize(canvasContainer.offsetWidth, canvasContainer.offsetHeight);
