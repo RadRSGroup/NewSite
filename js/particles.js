@@ -36,11 +36,11 @@ function createOptimizedParticleTexture() {
     context.arc(size/2, size/2, size/3, 0, Math.PI * 2);
     context.fill();
     
-    // Contrasting glow - warm orange/gold to contrast dark gradient background
+    // Bright, vibrant glow with higher intensity
     const glowGradient = context.createRadialGradient(size/2, size/2, size/4, size/2, size/2, size/2);
-    glowGradient.addColorStop(0, 'rgba(255, 180, 100, 0.4)'); // Warm orange
-    glowGradient.addColorStop(0.6, 'rgba(255, 140, 60, 0.2)'); // Deeper orange
-    glowGradient.addColorStop(1, 'rgba(255, 100, 0, 0)');
+    glowGradient.addColorStop(0, 'rgba(255, 220, 150, 0.8)'); // Bright warm glow
+    glowGradient.addColorStop(0.6, 'rgba(255, 180, 100, 0.6)'); // Enhanced orange
+    glowGradient.addColorStop(1, 'rgba(255, 150, 50, 0.2)');   // Visible outer glow
     
     context.globalCompositeOperation = 'screen';
     context.fillStyle = glowGradient;
@@ -134,12 +134,12 @@ function initParticles() {
         positions[i * 3 + 1] = radius * Math.sin(theta) * Math.sin(phi);
         positions[i * 3 + 2] = radius * Math.cos(phi);
 
-        // Enhanced blue spectrum with minimal white
+        // Brighter spectrum with enhanced luminosity
         const colorPhase = i / settings.particleCount * Math.PI * 2;
-        const variation = Math.random() * 0.15;
-        colors[i * 3] = 0.1 + Math.sin(colorPhase) * 0.2 + variation;     // R - low red
-        colors[i * 3 + 1] = 0.3 + Math.cos(colorPhase) * 0.3 + variation; // G - moderate green
-        colors[i * 3 + 2] = 0.8 + Math.sin(colorPhase + 1) * 0.2 + variation; // B - high blue
+        const variation = Math.random() * 0.3;
+        colors[i * 3] = 0.4 + Math.sin(colorPhase) * 0.4 + variation;     // R - brighter
+        colors[i * 3 + 1] = 0.6 + Math.cos(colorPhase) * 0.4 + variation; // G - brighter
+        colors[i * 3 + 2] = 0.9 + Math.sin(colorPhase + 1) * 0.3 + variation; // B - very bright
 
         // Varied sizes with minimum threshold
         // Increased size distribution with sparkle sizing
@@ -169,7 +169,7 @@ function initParticles() {
         map: particleTexture,
         vertexColors: true,
         transparent: true,
-        opacity: 0.85,
+        opacity: 0.95,
         blending: THREE.AdditiveBlending,
         depthWrite: false,
         sizeAttenuation: true,
@@ -256,11 +256,12 @@ function animateParticles(currentTime) {
         const baseGlow = Math.sin(time * 0.3 + particleIndex * 0.1) * 0.15 + 0.85;
         const sparkleBoost = 1 + sparkle.intensity * 2;
         
-        // Warm contrasting colors (orange/gold) mixed with blue base
-        const warmContrast = sparkle.intensity * 0.6;
-        colors[i] = ((0.1 + Math.sin(colorPhase) * 0.15) * baseGlow + warmContrast) * sparkleBoost;         // R
-        colors[i + 1] = ((0.3 + Math.cos(colorPhase + 1) * 0.2) * baseGlow + warmContrast * 0.7) * sparkleBoost; // G
-        colors[i + 2] = ((0.75 + Math.sin(colorPhase + 2) * 0.2) * baseGlow - warmContrast * 0.3) * sparkleBoost; // B
+        // Bright, vibrant colors with enhanced contrast
+        const warmContrast = sparkle.intensity * 0.8;
+        const brightBoost = 1.2; // Overall brightness multiplier
+        colors[i] = ((0.4 + Math.sin(colorPhase) * 0.3) * baseGlow + warmContrast) * sparkleBoost * brightBoost;         // R
+        colors[i + 1] = ((0.6 + Math.cos(colorPhase + 1) * 0.4) * baseGlow + warmContrast * 0.8) * sparkleBoost * brightBoost; // G
+        colors[i + 2] = ((0.9 + Math.sin(colorPhase + 2) * 0.3) * baseGlow + warmContrast * 0.2) * sparkleBoost * brightBoost; // B
     }
     
     particles.geometry.attributes.position.needsUpdate = true;
