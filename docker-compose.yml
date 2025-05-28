@@ -25,30 +25,7 @@ services:
     networks:
       - app-network
 
-  vpn:
-    image: qmcgaw/gluetun
-    container_name: vpn
-    cap_add:
-      - NET_ADMIN
-    environment:
-      - VPN_SERVICE_PROVIDER=nordvpn
-      - VPN_TYPE=openvpn
-      - OPENVPN_USER=${VPN_TOKEN}
-      - OPENVPN_PASSWORD=${VPN_TOKEN}
-      - SERVER_REGIONS=us_tampa
-    volumes:
-      - ./vpn:/gluetun:ro
-    ports:
-      - "8888:8888/tcp"  # HTTP proxy
-      - "8388:8388/tcp"  # Shadowsocks
-      - "8388:8388/udp"  # Shadowsocks
-    restart: unless-stopped
-    dns:
-      - 1.1.1.1
-      - 1.0.0.1
-    networks:
-      - vpn_network
-
+  
   # Add more services as needed, for example:
   # api:
   #   build:
@@ -78,7 +55,7 @@ networks:
   app-network:
     driver: bridge
   vpn_network:
-    external: true
+    external: false
 
 # volumes:
 #   postgres_data: 

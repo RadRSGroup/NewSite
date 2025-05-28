@@ -1,31 +1,31 @@
-# Modern Business Website with Three.js Particle Effects
+# RenderTS NewSite
 
-A modern, responsive business website featuring dynamic Three.js particle animations, interactive card effects, and smooth transitions. Built with vanilla JavaScript and CSS3.
+A modern, responsive website featuring an enhanced Three.js particle system with dynamic animations and glassmorphism design. Built with vanilla JavaScript and advanced CSS3 techniques.
 
 ## 🌟 Features
 
-### Visual Effects
-- Three.js powered particle field animation in hero section
-- Interactive particle line connections with depth effects
-- Responsive hover effects with 3D transformations
-- Dynamic gradient backgrounds
-- Smooth loading transitions
+### 🌌 Enhanced Particle System
+- **4000 dynamic particles** with individual rotation and physics simulation
+- **Sharp, high-resolution textures** (64px) for crisp visual quality
+- **Dynamic blue-to-cyan color spectrum** with warm contrasting glow effects
+- **Sparkle effects** with fade-in/fade-out animations and random activation
+- **Gentle swirl rotation** with continuous X/Y axis movement
+- **Cross-platform optimization** including Windows-specific rendering improvements
+- **Particle visibility** throughout all page sections with semi-transparent overlays
 
-### UI Components
-- Modern card design with depth effects
-- Interactive project showcases
-- Methodology timeline
-- Responsive navigation
-- Contact form with validation
-- Statistics display with animations
+### 🎨 Visual Design
+- **Glassmorphism interface** with backdrop blur effects and semi-transparent sections
+- **Enhanced card designs** with 3D hover transformations and depth shadows
+- **Responsive grid layouts** that adapt seamlessly to all screen sizes
+- **Smooth animations** with cubic-bezier easing and micro-interactions
+- **Gradient backgrounds** with contrasting warm/cool color schemes
+- **Advanced lighting effects** with particle glow and sparkle systems
 
-### Technical Features
-- Vanilla JavaScript (No framework dependencies)
-- CSS3 with custom properties
-- Three.js for 3D particle effects
-- Responsive design for all screen sizes
-- Performance optimized animations
-- Cross-browser compatible
+### 📱 Responsive & Accessible
+- **Mobile-first design** with touch-optimized interactions
+- **Accessibility features** including skip links, reduced motion support, and ARIA labels
+- **Cross-browser compatibility** with vendor prefix support and fallbacks
+- **Performance optimized** with throttled animations, efficient rendering, and adaptive quality
 
 ## 🚀 Getting Started
 
@@ -75,12 +75,32 @@ The color scheme can be modified in `css/styles.css`:
 }
 ```
 
-### Particle Effects
-Particle behavior can be adjusted in `js/three.js`:
-- Particle count
-- Movement speed
-- Colors
-- Interaction sensitivity
+### Particle System Configuration
+The particle system can be customized in `js/particles.js`:
+
+```javascript
+// Core particle settings
+particleCount: 4000,                    // Total number of particles
+particleSize: 0.12,                     // Base particle size
+radius: 9.5 + Math.random() * 3,       // Spawn radius (9.5-12.5)
+
+// Animation settings
+rotationSpeed: 0.002,                   // Global rotation speed
+waveIntensity: 0.002,                   // Wave movement intensity
+timeScale: 0.2,                         // Overall animation speed
+
+// Visual effects
+sparkleIntensity: 0.8,                  // Sparkle brightness
+glowEffects: true,                      // Enable glow effects
+opacity: 0.85,                          // Particle opacity
+```
+
+### Advanced Features
+- **Individual particle rotation** with unique speeds and directions
+- **Physics simulation** with gravity, damping, and repulsion forces
+- **Dynamic color transitions** based on rotation and time
+- **Sparkle system** with random activation and fade cycles
+- **Performance scaling** based on device capabilities
 
 ## 📱 Responsive Design
 

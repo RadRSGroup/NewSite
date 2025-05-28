@@ -1,28 +1,4 @@
-# Build stage
-FROM node:18-alpine AS builder
-
-WORKDIR /app
-
-# Install build dependencies
-RUN apk add --no-cache \
-    python3 \
-    make \
-    g++ \
-    git
-
-# Copy package files
-COPY package*.json ./
-
-# Install dependencies
-RUN npm ci
-
-# Copy source code
-COPY . .
-
-# Build the application
-RUN npm run build
-
-# Production stage
+# Static site Dockerfile - serves files from web/public
 FROM nginx:alpine
 
 # Install required system libraries
@@ -32,8 +8,16 @@ RUN apk add --no-cache \
     curl \
     && rm -rf /var/cache/apk/*
 
-# Copy built files from builder stage
-COPY --from=builder /app/dist /usr/share/nginx/html
+# Copy static files from web/public to nginx html directory
+COPY web/public /usr/share/nginx/html
+
+# Copy root level static files as well
+COPY css /usr/share/nginx/html/css
+COPY js /usr/share/nginx/html/js
+COPY images /usr/share/nginx/html/images
+COPY favicon.ico /usr/share/nginx/html/
+COPY index.html /usr/share/nginx/html/
+COPY particle-tool.html /usr/share/nginx/html/
 
 # Copy Nginx configuration
 COPY nginx.conf /etc/nginx/conf.d/default.conf
@@ -50,4 +34,4 @@ ENV TZ=UTC
 EXPOSE 80
 
 # Start Nginx
-CMD ["nginx", "-g", "daemon off;"] 
+CMD ["nginx", "-g", "daemon off;"]

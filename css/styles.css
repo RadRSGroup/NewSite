@@ -191,12 +191,12 @@ body {
 
 /* Hero Section */
 #canvas-container {
-    position: absolute;
+    position: fixed;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    z-index: 1;
+    z-index: 0;
     pointer-events: none;
 }
 
@@ -235,8 +235,10 @@ body {
 /* About Section */
 .about {
     padding: var(--spacing-xl) var(--spacing-lg);
-    background: var(--dark-bg);
+    background: rgba(10, 13, 54, 0.5);
     position: relative;
+    z-index: 1;
+    backdrop-filter: blur(3px);
 }
 
 .about-content {
@@ -290,17 +292,19 @@ body {
 }
 
 .mission-container {
-    background: linear-gradient(135deg, rgba(10, 15, 76, 0.8), rgba(227, 24, 55, 0.8));
+    background: linear-gradient(135deg, rgba(10, 15, 76, 0.9), rgba(227, 24, 55, 0.9));
     border-radius: var(--border-radius-lg);
     padding: var(--spacing-xl);
     margin: var(--spacing-xl) auto;
     max-width: 800px;
     position: relative;
+    z-index: 2;
     overflow: hidden;
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
     transform: translateY(0);
     transition: transform 0.3s ease, box-shadow 0.3s ease;
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(10px);
 }
 
 .mission-container:hover {
@@ -343,8 +347,11 @@ body {
 /* Services Section */
 .services {
     padding: 4rem 0;
-    background: var(--dark-bg);
+    background: rgba(10, 13, 54, 0.4);
     overflow: hidden;
+    position: relative;
+    z-index: 1;
+    backdrop-filter: blur(3px);
 }
 
 .services h2 {
@@ -370,19 +377,20 @@ body {
 .project-card {
     flex: 0 0 calc(100% - 2rem);
     max-width: 500px;
-    background: linear-gradient(135deg, rgba(10, 15, 76, 0.8), rgba(227, 24, 55, 0.2));
+    background: linear-gradient(135deg, rgba(10, 15, 76, 0.9), rgba(227, 24, 55, 0.3));
     border-radius: var(--border-radius-lg);
     padding: 2rem;
     transition: transform 0.3s ease, box-shadow 0.3s ease;
     position: relative;
+    z-index: 2;
     overflow: hidden;
-    backdrop-filter: blur(10px);
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(15px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
     scroll-snap-align: center;
     display: flex;
     flex-direction: column;
     gap: 1.5rem;
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
 }
 
 .project-card:hover {
@@ -600,8 +608,9 @@ body {
     position: relative;
     z-index: 1;
     padding: var(--spacing-xl) var(--spacing-lg);
-    background: var(--dark-bg);
+    background: rgba(10, 13, 54, 0.5);
     overflow: hidden;
+    backdrop-filter: blur(3px);
 }
 
 .contact-header {
@@ -709,11 +718,13 @@ body {
 }
 
 .contact-form {
-    background: rgba(255, 255, 255, 0.03);
+    background: rgba(255, 255, 255, 0.05);
     padding: var(--spacing-xl);
     border-radius: var(--border-radius-lg);
     backdrop-filter: blur(20px);
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    position: relative;
+    z-index: 2;
 }
 
 .form-group {
@@ -1158,9 +1169,11 @@ html {
 /* Methodology Section */
 .methodology {
     padding: var(--spacing-xl) var(--spacing-xl);
-    background: linear-gradient(135deg, rgba(10, 15, 76, 0.9), rgba(5, 8, 38, 0.9));
+    background: rgba(10, 13, 54, 0.4);
     position: relative;
+    z-index: 1;
     overflow: hidden;
+    backdrop-filter: blur(3px);
 }
 
 .methodology .container {
@@ -1234,7 +1247,10 @@ html {
 /* Results Section */
 .results {
     padding: var(--spacing-xl) var(--spacing-xl);
-    background: var(--dark-bg);
+    background: rgba(10, 13, 54, 0.5);
+    position: relative;
+    z-index: 1;
+    backdrop-filter: blur(3px);
 }
 
 .results .container {
@@ -1305,8 +1321,9 @@ html {
     position: relative;
     z-index: 1;
     padding: var(--spacing-xl) var(--spacing-lg);
-    background: var(--dark-bg);
+    background: rgba(10, 13, 54, 0.4);
     overflow: hidden;
+    backdrop-filter: blur(3px);
 }
 
 .ai-content {
@@ -1468,7 +1485,7 @@ canvas {
 /* Windows Chrome/Edge specific fixes */
 @media screen and (-ms-high-contrast: active), (-ms-high-contrast: none) {
     canvas {
-        image-rendering: -ms-interpolation-mode: nearest-neighbor;
+        -ms-interpolation-mode: nearest-neighbor;
     }
 }
 

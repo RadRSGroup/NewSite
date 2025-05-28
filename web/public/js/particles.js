@@ -1,6 +1,6 @@
 // Three.js Particle System
 let scene, camera, renderer, particles;
-const particleCount = 2000;
+const particleCount = 4000;
 
 function createRoundParticleTexture() {
     const canvas = document.createElement('canvas');
