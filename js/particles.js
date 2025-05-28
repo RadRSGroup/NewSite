@@ -24,11 +24,12 @@ function createOptimizedParticleTexture() {
     // Enable crisp rendering
     context.imageSmoothingEnabled = false;
     
-    // Sharp core gradient
-    const gradient = context.createRadialGradient(size/2, size/2, 0, size/2, size/2, size/3);
+    // Extra sharp core gradient for better definition
+    const gradient = context.createRadialGradient(size/2, size/2, 0, size/2, size/2, size/4);
     gradient.addColorStop(0, 'rgba(255, 255, 255, 1)');
-    gradient.addColorStop(0.3, 'rgba(255, 255, 255, 0.9)');
-    gradient.addColorStop(0.7, 'rgba(255, 255, 255, 0.3)');
+    gradient.addColorStop(0.2, 'rgba(255, 255, 255, 0.95)');
+    gradient.addColorStop(0.5, 'rgba(255, 255, 255, 0.6)');
+    gradient.addColorStop(0.8, 'rgba(255, 255, 255, 0.2)');
     gradient.addColorStop(1, 'rgba(255, 255, 255, 0)');
     
     context.fillStyle = gradient;
@@ -36,11 +37,11 @@ function createOptimizedParticleTexture() {
     context.arc(size/2, size/2, size/3, 0, Math.PI * 2);
     context.fill();
     
-    // Bright, vibrant glow with higher intensity
+    // Subtle glow with moderate intensity
     const glowGradient = context.createRadialGradient(size/2, size/2, size/4, size/2, size/2, size/2);
-    glowGradient.addColorStop(0, 'rgba(255, 220, 150, 0.8)'); // Bright warm glow
-    glowGradient.addColorStop(0.6, 'rgba(255, 180, 100, 0.6)'); // Enhanced orange
-    glowGradient.addColorStop(1, 'rgba(255, 150, 50, 0.2)');   // Visible outer glow
+    glowGradient.addColorStop(0, 'rgba(255, 200, 140, 0.5)'); // Moderate warm glow
+    glowGradient.addColorStop(0.6, 'rgba(255, 170, 90, 0.3)'); // Subtle orange
+    glowGradient.addColorStop(1, 'rgba(255, 140, 40, 0.1)');   // Gentle outer glow
     
     context.globalCompositeOperation = 'screen';
     context.fillStyle = glowGradient;
@@ -134,12 +135,12 @@ function initParticles() {
         positions[i * 3 + 1] = radius * Math.sin(theta) * Math.sin(phi);
         positions[i * 3 + 2] = radius * Math.cos(phi);
 
-        // Brighter spectrum with enhanced luminosity
+        // Balanced color spectrum with moderate brightness
         const colorPhase = i / settings.particleCount * Math.PI * 2;
-        const variation = Math.random() * 0.3;
-        colors[i * 3] = 0.4 + Math.sin(colorPhase) * 0.4 + variation;     // R - brighter
-        colors[i * 3 + 1] = 0.6 + Math.cos(colorPhase) * 0.4 + variation; // G - brighter
-        colors[i * 3 + 2] = 0.9 + Math.sin(colorPhase + 1) * 0.3 + variation; // B - very bright
+        const variation = Math.random() * 0.2;
+        colors[i * 3] = 0.25 + Math.sin(colorPhase) * 0.25 + variation;     // R - toned down
+        colors[i * 3 + 1] = 0.45 + Math.cos(colorPhase) * 0.3 + variation; // G - moderate
+        colors[i * 3 + 2] = 0.75 + Math.sin(colorPhase + 1) * 0.25 + variation; // B - blue dominant
 
         // Varied sizes with minimum threshold
         // Increased size distribution with sparkle sizing
@@ -256,12 +257,12 @@ function animateParticles(currentTime) {
         const baseGlow = Math.sin(time * 0.3 + particleIndex * 0.1) * 0.15 + 0.85;
         const sparkleBoost = 1 + sparkle.intensity * 2;
         
-        // Bright, vibrant colors with enhanced contrast
-        const warmContrast = sparkle.intensity * 0.8;
-        const brightBoost = 1.2; // Overall brightness multiplier
-        colors[i] = ((0.4 + Math.sin(colorPhase) * 0.3) * baseGlow + warmContrast) * sparkleBoost * brightBoost;         // R
-        colors[i + 1] = ((0.6 + Math.cos(colorPhase + 1) * 0.4) * baseGlow + warmContrast * 0.8) * sparkleBoost * brightBoost; // G
-        colors[i + 2] = ((0.9 + Math.sin(colorPhase + 2) * 0.3) * baseGlow + warmContrast * 0.2) * sparkleBoost * brightBoost; // B
+        // Balanced colors with moderate contrast
+        const warmContrast = sparkle.intensity * 0.6;
+        const brightBoost = 1.0; // Normalized brightness multiplier
+        colors[i] = ((0.25 + Math.sin(colorPhase) * 0.2) * baseGlow + warmContrast) * sparkleBoost * brightBoost;         // R
+        colors[i + 1] = ((0.45 + Math.cos(colorPhase + 1) * 0.25) * baseGlow + warmContrast * 0.6) * sparkleBoost * brightBoost; // G
+        colors[i + 2] = ((0.75 + Math.sin(colorPhase + 2) * 0.2) * baseGlow + warmContrast * 0.2) * sparkleBoost * brightBoost; // B
     }
     
     particles.geometry.attributes.position.needsUpdate = true;
