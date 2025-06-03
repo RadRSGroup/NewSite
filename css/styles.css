@@ -640,6 +640,7 @@ body {
     background: linear-gradient(135deg, var(--accent-color), var(--secondary-color));
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
+    background-clip: text;
     font-weight: 800;
 }
 
@@ -1303,6 +1304,7 @@ html {
     background: linear-gradient(135deg, var(--secondary-color), #ff6b6b);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
+    background-clip: text;
 }
 
 /* Scroll Indicator for Mobile */
@@ -1578,6 +1580,7 @@ html {
     background: linear-gradient(135deg, var(--accent-color), var(--secondary-color));
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
+    background-clip: text;
 }
 
 .ai-title.visible {
@@ -1699,30 +1702,29 @@ html {
         padding: 0 var(--spacing-md);
     }
 } 
-/* Windows-specific rendering optimizations */
+/* Cross-browser rendering optimizations */
 canvas {
     image-rendering: auto !important;
     image-rendering: -webkit-optimize-contrast !important;
     image-rendering: crisp-edges;
-    /* Force hardware acceleration on Windows */
+    /* Force hardware acceleration */
     transform: translateZ(0);
     will-change: transform;
 }
 
 #canvas-container canvas {
-    /* Additional Windows optimizations */
+    /* Standard optimizations for all browsers */
     backface-visibility: hidden;
     perspective: 1000px;
 }
 
-/* Windows Chrome/Edge specific fixes */
+/* Browser-specific compatibility fixes */
 @media screen and (-ms-high-contrast: active), (-ms-high-contrast: none) {
     canvas {
         -ms-interpolation-mode: nearest-neighbor;
     }
 }
 
-/* Windows Firefox specific fixes */
 @-moz-document url-prefix() {
     canvas {
         image-rendering: -moz-crisp-edges;

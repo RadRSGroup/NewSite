@@ -7,9 +7,9 @@ function detectWindowsAndAdjustSettings() {
     
     return {
         particleCount: 4000,
-        pixelRatio: isWindows ? Math.min(window.devicePixelRatio, 1.5) : Math.min(window.devicePixelRatio, 2),
-        antialias: !isWindows || window.devicePixelRatio < 2,
-        powerPreference: isWindows ? 'default' : 'high-performance',
+        pixelRatio: Math.min(window.devicePixelRatio, 2),
+        antialias: window.devicePixelRatio < 2,
+        powerPreference: 'high-performance',
         enableOptimizations: isWindows
     };
 }
